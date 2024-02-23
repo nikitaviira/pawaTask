@@ -5,7 +5,7 @@ import authController from '@/api/controllers/authController';
 export const useUserStore = defineStore('user', {
   state: () => ({
     token: localStorage.getItem('jwt'),
-    userName: localStorage.getItem('userName')
+    email: localStorage.getItem('email')
   }),
   getters: {
     isLoggedIn: (state) => !!state.token
@@ -34,15 +34,15 @@ export const useUserStore = defineStore('user', {
     },
     setUserInfo(payload: AuthResponse) {
       localStorage.setItem('jwt', payload.jwtToken);
-      localStorage.setItem('userName', payload.username);
+      localStorage.setItem('email', payload.email);
       this.token = payload.jwtToken;
-      this.userName = payload.username;
+      this.email = payload.email;
     },
     removeUserInfo() {
       localStorage.removeItem('jwt');
-      localStorage.removeItem('userName');
+      localStorage.removeItem('email');
       this.token = '';
-      this.userName = '';
+      this.email = '';
     }
   }
 });

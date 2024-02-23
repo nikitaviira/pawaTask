@@ -2,13 +2,13 @@ import apiClient from '../client';
 import type { AxiosResponse } from 'axios';
 
 export interface Credentials {
-  username: string;
+  email: string;
   password: string;
 }
 
 export interface AuthResponse {
   jwtToken: string;
-  username: string;
+  email: string;
 }
 
 export default {
