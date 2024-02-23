@@ -87,7 +87,7 @@
   background: white;
   min-width: 500px;
   border-radius: 20px;
-  box-shadow: 0 1px 3px #0000001f, 0 1px 2px #0000003d;
+  box-shadow: $shadow;
   min-height: 590px;
   display: flex;
   flex-direction: column;

@@ -1,40 +1,20 @@
 <template>
   <AuthForm @submit="submitForm">
-    <InputWrapper>
-      <label for="email">Email</label>
-      <input
-        id="email"
-        v-model.trim="loginForm.email"
-        :class="{'validation-error': $v.email.$error}"
-        placeholder="Email"
-        type="text"
-        @input="$v.email.$touch()"
-      >
-      <p
-        v-if="$v.email.$dirty && $v.email.required.$invalid"
-        class="validation-error-msg"
-      >
-        This field is required
-      </p>
-    </InputWrapper>
+    <InputWrapper
+      id="email"
+      v-model.trim="loginForm.email"
+      type="text"
+      label="Email"
+      :validator="$v.email"
+    />
 
-    <InputWrapper>
-      <label for="password">Password</label>
-      <input
-        id="password"
-        v-model.trim="loginForm.password"
-        :class="{'validation-error': $v.password.$error}"
-        placeholder="Password"
-        type="password"
-        @input="$v.password.$touch()"
-      >
-      <p
-        v-if="$v.password.$dirty && $v.password.required.$invalid"
-        class="validation-error-msg"
-      >
-        This field is required
-      </p>
-    </InputWrapper>
+    <InputWrapper
+      id="password"
+      v-model.trim="loginForm.password"
+      type="password"
+      label="Password"
+      :validator="$v.password"
+    />
   </AuthForm>
 </template>
 

@@ -1,98 +1,53 @@
 <template>
   <AuthForm @submit="submitForm">
-    <InputWrapper>
-      <label for="email">Email</label>
-      <input
-        id="email"
-        v-model.trim="registerForm.email"
-        :class="{'validation-error': $v.email.$error}"
-        placeholder="Email"
-        type="text"
-        @input="$v.email.$touch()"
-      >
-      <p
-        v-if="$v.email.$dirty && $v.email.required.$invalid"
-        class="validation-error-msg"
-      >
-        This field is required
-      </p>
-      <p
-        v-else-if="$v.email.$dirty && $v.email.emailValidation.$invalid"
-        class="validation-error-msg"
-      >
-        Incorrect email format
-      </p>
-    </InputWrapper>
+    <InputWrapper
+      id="email"
+      v-model.trim="registerForm.email"
+      type="text"
+      label="Email"
+      :validator="$v.email"
+    />
 
-    <InputWrapper>
-      <label for="password">Password</label>
-      <input
-        id="password"
-        v-model.trim="registerForm.password"
-        :class="{'validation-error': $v.password.$error}"
-        placeholder="Password"
-        type="password"
-        @input="$v.password.$touch()"
-      >
-      <p
-        v-if="$v.password.$dirty && $v.password.required.$invalid"
-        class="validation-error-msg"
-      >
-        This field is required
-      </p>
-      <p
-        v-else-if="$v.password.$dirty && $v.password.passwordValidation.$invalid"
-        class="validation-error-msg"
-      >
-        At least 8 chars long, one capital letter and one number
-      </p>
-    </InputWrapper>
+    <InputWrapper
+      id="password"
+      v-model.trim="registerForm.password"
+      type="password"
+      label="Password"
+      :validator="$v.password"
+    />
 
-    <InputWrapper>
-      <label for="repeat-password">Repeat password</label>
-      <input
-        id="repeat-password"
-        v-model.trim="registerForm.repeatedPassword"
-        :class="{'validation-error': $v.repeatedPassword.$error}"
-        placeholder="Repeat password"
-        type="password"
-        @input="$v.repeatedPassword.$touch()"
-      >
-      <p
-        v-if="$v.repeatedPassword.$dirty && $v.repeatedPassword.required.$invalid"
-        class="validation-error-msg"
-      >
-        This field is required
-      </p>
-      <p
-        v-else-if="$v.repeatedPassword.$dirty && $v.repeatedPassword.repeatedPasswordValidation.$invalid"
-        class="validation-error-msg"
-      >
-        Password doesn't match
-      </p>
-    </InputWrapper>
+    <InputWrapper
+      id="repeatedPassword"
+      v-model.trim="registerForm.repeatedPassword"
+      type="password"
+      label="Repeat password"
+      :validator="$v.repeatedPassword"
+    />
   </AuthForm>
 </template>
 
 <script setup lang="ts">
-  import { required } from '@vuelidate/validators';
+  import { helpers, required } from '@vuelidate/validators';
   import { ref } from 'vue';
   import type { RegistrationCredentials } from '@/api/controllers/authController';
   import useVuelidate from '@vuelidate/core';
   import { useUserStore } from '@/stores/userStore';
   import { useRouter } from 'vue-router';
-  import { emailValidation, passwordValidation } from '@/components/validation';
+  import { emailValidation, passwordValidation } from '@/components/validation/validation';
   import AuthForm from '@/components/auth/AuthForm.vue';
   import InputWrapper from '@/components/auth/InputWrapper.vue';
 
   const router = useRouter();
   const userStore = useUserStore();
 
-  const repeatedPasswordValidation = (value: string) => registerForm.value.password === value;
+  const repeatedPasswordValid = helpers.withMessage('Password does not match', (value: string) => registerForm.value.password === value);
+  const passwordValid = helpers.withMessage('At least 8 chars long, one capital letter and one number', passwordValidation);
+  const emailValid = helpers.withMessage('Incorrect email format', emailValidation);
+
   const rules = {
-    email: { required, emailValidation },
-    password: { required, passwordValidation },
-    repeatedPassword: { required, repeatedPasswordValidation }
+    email: { required, emailValid },
+    password: { required, passwordValid },
+    repeatedPassword: { required, repeatedPasswordValid }
   };
 
   const registerForm = ref<RegistrationCredentials>({

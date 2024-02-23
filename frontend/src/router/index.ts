@@ -10,8 +10,7 @@ const router = createRouter({
     {
       path: '/',
       name: 'tasks',
-      component: Tasks,
-      meta: { authRequired: true }
+      component: Tasks
     },
     {
       path: '/auth',
