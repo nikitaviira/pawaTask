@@ -18,60 +18,60 @@
 </script>
 
 <style lang="scss" scoped>
-@import "@/assets/variables";
+  @import "@/assets/variables";
 
-.brand {
-  font-weight: bold;
-  font-size: 25px;
-  margin: 0;
-  color: $main-color;
-}
-
-.task-container {
-  position: fixed;
-  top: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 640px;
-  height: 800px;
-  padding: 20px;
-  background: white;
-  box-shadow: $shadow;
-
-  @media screen and (max-width: 700px) {
-    height: 100%;
-    box-shadow: none;
-    width: 100%;
-    top: 0;
+  .brand {
+    font-weight: bold;
+    font-size: 25px;
+    margin: 0;
+    color: $main-color;
   }
-}
 
-.add-task {
-  background: $main-color;
-  color: white;
-  padding: 5px 15px;
-  font-size: 14px;
-  cursor: pointer;
-  font-weight: bold;
-}
+  .task-container {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 640px;
+    height: 800px;
+    padding: 20px;
+    background: white;
+    box-shadow: $shadow;
 
-.add-task-link {
-  color: $main-color;
-  text-decoration: underline;
-  font-weight: bold;
-  cursor: pointer;
-}
+    @media screen and (max-width: 700px) {
+      height: 100%;
+      box-shadow: none;
+      width: 100%;
+      top: 0;
+    }
+  }
 
-hr {
-  display: block;
-  height: 1px;
-  border: 0;
-  border-top: 1px solid #ccc;
-  margin: 1em 0;
-  padding: 0;
-}
+  .add-task {
+    background: $main-color;
+    color: white;
+    padding: 5px 15px;
+    font-size: 14px;
+    cursor: pointer;
+    font-weight: bold;
+  }
 
-span {
-  font-size: 14px;
-}
+  .add-task-link {
+    color: $main-color;
+    text-decoration: underline;
+    font-weight: bold;
+    cursor: pointer;
+  }
+
+  hr {
+    display: block;
+    height: 1px;
+    border: 0;
+    border-top: 1px solid #ccc;
+    margin: 1em 0;
+    padding: 0;
+  }
+
+  span {
+    font-size: 14px;
+  }
 </style>
