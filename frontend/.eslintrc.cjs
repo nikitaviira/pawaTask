@@ -1,5 +1,5 @@
 module.exports = {
-    root: true,
+  root: true,
   env: {
     browser: true,
     node: true,
@@ -7,12 +7,12 @@ module.exports = {
     'vue/setup-compiler-macros': true
   },
   extends: [
-        'eslint:recommended',
+    'eslint:recommended',
     'plugin:vue/recommended',
     'plugin:cypress/recommended',
     '@vue/standard',
     '@vue/typescript'
-    ],
+  ],
   rules: {
     // general
     semi: 'off',
@@ -75,9 +75,9 @@ module.exports = {
     '@typescript-eslint/indent': ['error', 2]
   },
 
-    parserOptions: {
-      parser: '@typescript-eslint/parser'
-    },
+  parserOptions: {
+    parser: '@typescript-eslint/parser'
+  },
 
   overrides: [
     {
