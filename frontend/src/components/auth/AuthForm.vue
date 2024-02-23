@@ -41,7 +41,7 @@
     cursor: pointer;
 
     &:hover {
-      background: $main-color;
+      filter: brightness(95%);
     }
   }
 </style>
