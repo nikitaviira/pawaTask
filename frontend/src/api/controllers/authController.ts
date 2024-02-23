@@ -1,5 +1,5 @@
-import apiClient from '../client'
-import type { AxiosResponse } from 'axios'
+import apiClient from '../client';
+import type { AxiosResponse } from 'axios';
 
 export interface Credentials {
   username: string;
@@ -13,10 +13,10 @@ export interface AuthResponse {
 
 export default {
   login(credentials: Credentials): Promise<AxiosResponse<AuthResponse>> {
-    return apiClient().post('/auth/login', credentials)
+    return apiClient().post('/auth/login', credentials);
   },
 
   register(credentials: Credentials): Promise<AxiosResponse<AuthResponse>> {
-    return apiClient().post('/auth/register', credentials)
+    return apiClient().post('/auth/register', credentials);
   }
-}
+};
