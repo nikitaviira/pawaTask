@@ -9,3 +9,11 @@ html, body, #app {
   overflow-x: hidden;
   font-family: 'Open Sans', sans-serif;
 }
+
+* {
+  box-sizing: border-box;
+}
+
+input, button {
+  all: unset;
+}

@@ -6,6 +6,10 @@ export interface Credentials {
   password: string;
 }
 
+export interface RegistrationCredentials extends Credentials {
+  repeatedPassword: string;
+}
+
 export interface AuthResponse {
   jwtToken: string;
   email: string;
