@@ -1,14 +1,33 @@
-import type { AxiosInstance } from 'axios'
-import Axios from 'axios'
+import type { AxiosInstance } from 'axios';
+import Axios from 'axios';
+import router from '@/router';
+import { useUserStore } from '@/stores/userStore';
 
-const API_GATEWAY_URL = import.meta.env.VITE_API_GATEWAY_URL
+const API_GATEWAY_URL = import.meta.env.VITE_API_GATEWAY_URL;
 
 export default (): AxiosInstance => {
+  const store = useUserStore();
   const instance = Axios.create({
     baseURL: API_GATEWAY_URL + '/api/'
-  })
+  });
 
-  instance.defaults.headers.common['Access-Control-Allow-Origin'] = API_GATEWAY_URL
+  instance.defaults.headers.common['Access-Control-Allow-Origin'] = API_GATEWAY_URL;
 
-  return instance
+  instance.interceptors.response.use((x) => x, async(error) => {
+    if (error.response.status === 401) {
+      store.logout();
+      await router.push('/auth');
+    } else {
+      throw error;
+    }
+  });
+
+  instance.interceptors.request.use(function(config) {
+    if (store.isLoggedIn) {
+      config.headers.Authorization = `Bearer ${store.token}`;
+    }
+    return config;
+  });
+
+  return instance;
 };
