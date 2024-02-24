@@ -5,10 +5,16 @@ export enum TaskPriority {
   CRITICAL = 'CRITICAL'
 }
 
-export interface CreateTaskRequest {
+export interface CreateTaskRequestDto {
   title: string;
   description: string;
   dueDate: string;
   priority: TaskPriority | undefined;
   comments: string;
+}
+
+export interface TaskDto {
+  id: number;
+  title: string;
+  dueDate: string;
 }
