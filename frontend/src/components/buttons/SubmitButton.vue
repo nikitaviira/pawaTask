@@ -1,20 +1,17 @@
 <template>
-  <button
-    class="add-task"
-    @click="emit('submit')"
-  >
+  <button class="submit-btn">
     {{ text }}
   </button>
 </template>
 
 <script setup lang="ts">
-  const emit = defineEmits<{ (e: 'submit'): void }>();
   defineProps<{ text: string }>();
 </script>
 
 <style lang="scss" scoped>
   @import "@/assets/variables";
-  .add-task {
+
+  .submit-btn {
     background: $main-color;
     color: white;
     padding: 5px 15px;

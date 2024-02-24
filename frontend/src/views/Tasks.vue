@@ -6,7 +6,7 @@
       </p>
       <SubmitButton
         text="Add a new task"
-        @submit="showAddTaskModal = true"
+        @click="showAddTaskModal = true"
       />
     </div>
     <hr>

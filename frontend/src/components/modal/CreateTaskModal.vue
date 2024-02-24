@@ -48,7 +48,7 @@
     <SubmitButton
       style="float: right"
       text="Add a new task"
-      @submit="submitForm"
+      @click="submitForm"
     />
   </ModalWrapper>
 </template>

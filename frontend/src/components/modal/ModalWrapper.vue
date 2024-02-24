@@ -33,7 +33,7 @@
 <script setup lang="ts">
   import { onClickOutside, onKeyStroke, useMediaQuery } from '@vueuse/core';
   import { ref, watch } from 'vue';
-  import CloseIcon from '@/components/icons/CloseIcon.vue';
+  import CloseIcon from '@/components/icons/close-icon.vue';
 
   const props = defineProps<{
     show: boolean,
