@@ -5,7 +5,7 @@
     @closed="emit('closed')"
   >
     <InputWrapper
-      v-model.trim="createTaskForm.title"
+      v-model.trim="taskForm.title"
       :validator="$v.title"
       label="Title"
       placeholder="Title"
@@ -13,7 +13,7 @@
     />
 
     <InputWrapper
-      v-model.trim="createTaskForm.description"
+      v-model.trim="taskForm.description"
       :validator="$v.description"
       label="Description"
       placeholder="Enter some description..."
@@ -21,7 +21,7 @@
     />
 
     <InputWrapper
-      v-model.trim="createTaskForm.dueDate"
+      v-model.trim="taskForm.dueDate"
       :validator="$v.dueDate"
       label="Set due date"
       placeholder="date"
@@ -29,7 +29,7 @@
     />
 
     <InputWrapper
-      v-model.trim="createTaskForm.priority"
+      v-model.trim="taskForm.priority"
       :validator="$v.priority"
       label="Priority"
       placeholder="Select task priority..."
@@ -38,7 +38,7 @@
     />
 
     <InputWrapper
-      v-model.trim="createTaskForm.comments"
+      v-model.trim="taskForm.comments"
       :validator="$v.description"
       label="Comments"
       placeholder="Enter some comments (optional)..."
@@ -56,34 +56,38 @@
 <script setup lang="ts">
   import InputWrapper from '@/components/auth/InputWrapper.vue';
   import ModalWrapper from '@/components/modal/ModalWrapper.vue';
-  import { helpers, required } from '@vuelidate/validators';
-  import { ref } from 'vue';
-  import { type CreateTaskRequest, TaskPriority } from '@/api/controllers/taskController';
+  import { required } from '@vuelidate/validators';
+  import { ref, watch } from 'vue';
+  import taskController, { type SaveTaskDto, TaskPriority } from '@/api/controllers/taskController';
   import useVuelidate from '@vuelidate/core';
   import SubmitButton from '@/components/buttons/SubmitButton.vue';
 
   const emit = defineEmits<{ (e: 'closed'): void }>();
-  defineProps<{ show: boolean }>();
+  const props = defineProps<{
+    show: boolean,
+    taskId: number | null
+  }>();
 
-  const dateValidation = helpers.withMessage('Date has to be in future', (value: string) => {
-    const currentDate = new Date().setHours(0, 0, 0, 0);
-    const inputDate = new Date(value).setHours(0, 0, 0, 0);
-    return inputDate >= currentDate;
+  watch(() => props.taskId, (taskId) => {
+    if (props.show && taskId) {
+      loadTask(taskId);
+    }
   });
 
   const rules = {
     title: { required },
     description: { required },
-    dueDate: { required, dateValidation },
+    dueDate: { required },
     priority: { required },
     comments: { }
   };
 
-  const createTaskForm = ref<CreateTaskRequest>({
+  const taskForm = ref<SaveTaskDto>({
+    id: null,
     title: '',
     description: '',
     dueDate: '',
-    priority: undefined,
+    priority: null,
     comments: ''
   });
 
@@ -94,13 +98,18 @@
     Critical: TaskPriority.CRITICAL
   };
 
-  const $v = useVuelidate(rules, createTaskForm);
+  const $v = useVuelidate(rules, taskForm);
 
   async function submitForm() {
     await $v.value.$validate().then(async(result) => {
       if (result) {
-        console.log('submited');
+        await taskController.saveTask(taskForm.value);
       }
     });
+  }
+
+  async function loadTask(taskId: number) {
+    const { data } = await taskController.task(taskId);
+    taskForm.value = data;
   }
 </script>

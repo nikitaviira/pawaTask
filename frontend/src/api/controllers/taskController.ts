@@ -1,3 +1,6 @@
+import type { AxiosResponse } from 'axios';
+import apiClient from '@/api/client';
+
 export enum TaskPriority {
   LOW = 'LOW',
   MEDIUM = 'MEDIUM',
@@ -5,11 +8,12 @@ export enum TaskPriority {
   CRITICAL = 'CRITICAL'
 }
 
-export interface CreateTaskRequestDto {
+export interface SaveTaskDto {
+  id: number | null;
   title: string;
   description: string;
   dueDate: string;
-  priority: TaskPriority | undefined;
+  priority: TaskPriority | null;
   comments: string;
 }
 
@@ -18,3 +22,17 @@ export interface TaskDto {
   title: string;
   dueDate: string;
 }
+
+export default {
+  tasks(): Promise<AxiosResponse<TaskDto>> {
+    return apiClient().get('/tasks');
+  },
+
+  task(taskId: number): Promise<AxiosResponse<SaveTaskDto>> {
+    return apiClient().get(`/task/${taskId}`);
+  },
+
+  saveTask(task: SaveTaskDto): Promise<AxiosResponse<void>> {
+    return apiClient().post('/task/save', task);
+  },
+};

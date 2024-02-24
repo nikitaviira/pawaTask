@@ -6,7 +6,7 @@
       </p>
       <SubmitButton
         text="Add a new task"
-        @click="showAddTaskModal = true"
+        @click="openSaveTaskModal(null)"
       />
     </div>
     <hr>
@@ -41,14 +41,16 @@
           <ButtonWithIcon
             color="white"
             icon="edit"
+            @click="openSaveTaskModal(task.id)"
           />
         </div>
       </div>
     </div>
   </div>
   <CreateTaskModal
-    :show="showAddTaskModal"
-    @closed="showAddTaskModal = false"
+    :show="showSaveTaskModal"
+    :task-id="selectedTaskId"
+    @closed="closeSaveTaskModal"
   />
 </template>
 
@@ -59,7 +61,8 @@
   import type { TaskDto } from '@/api/controllers/taskController';
   import ButtonWithIcon from '@/components/buttons/ButtonWithIcon.vue';
 
-  const showAddTaskModal = ref(false);
+  const showSaveTaskModal = ref(false);
+  const selectedTaskId = ref<number | null>(null);
   const tasks = ref<TaskDto[]>([
     {
       id: 10,
@@ -72,6 +75,16 @@
       dueDate: '02.02.2019'
     }
   ]);
+
+  function openSaveTaskModal(taskId: number | null) {
+    selectedTaskId.value = taskId;
+    showSaveTaskModal.value = true;
+  }
+
+  function closeSaveTaskModal() {
+    selectedTaskId.value = null;
+    showSaveTaskModal.value = false;
+  }
 </script>
 
 <style lang="scss" scoped>
