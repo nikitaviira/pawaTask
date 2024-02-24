@@ -21,7 +21,9 @@
               @click="closeModal"
             />
           </div>
-          <slot />
+          <div class="modal-content-wrapper">
+            <slot />
+          </div>
         </div>
       </div>
     </Transition>
@@ -89,7 +91,7 @@
 
     .modal-content {
       width: 480px;
-      min-height: 500px;
+      max-height: 90vh;
       background: white;
       padding: 20px;
 
@@ -97,6 +99,7 @@
         display: flex;
         justify-content: space-between;
         gap: 20px;
+        margin-bottom: 20px;
 
         .close-btn {
           cursor: pointer;
@@ -119,13 +122,27 @@
     @media screen and (max-width: 550px) {
       align-items: end;
 
+      .modal-header {
+        margin-bottom: 0 !important;
+        padding: 20px;
+      }
+
       .modal-content {
         width: 100%;
+        padding: 0;
       }
 
       .modal-header, .modal-content {
         border-top-left-radius: 30px;
         border-top-right-radius: 30px;
+      }
+
+      .modal-content-wrapper {
+        max-height: 80vh;
+        padding-left: 20px;
+        padding-right: 20px;
+        padding-bottom: 20px;
+        overflow-y: scroll;
       }
     }
   }

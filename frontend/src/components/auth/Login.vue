@@ -2,7 +2,7 @@
   <AuthForm @submit="submitForm">
     <InputWrapper
       v-model.trim="loginForm.email"
-      type="text"
+      type="input"
       label="Email"
       placeholder="Email"
       :validator="$v.email"
@@ -10,7 +10,7 @@
 
     <InputWrapper
       v-model.trim="loginForm.password"
-      type="password"
+      type="input-password"
       label="Password"
       placeholder="Password"
       :validator="$v.password"

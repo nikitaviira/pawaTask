@@ -3,11 +3,11 @@
     <label>{{ label }}:</label>
 
     <input
-      v-if="type === 'input'"
+      v-if="type === 'input' || type === 'input-password'"
       :class="{'validation-error': validator.$error}"
       :value="modelValue"
       :placeholder="placeholder"
-      type="text"
+      :type="type === 'input-password' ? 'password' : 'text'"
       @input="updateValue"
     >
 

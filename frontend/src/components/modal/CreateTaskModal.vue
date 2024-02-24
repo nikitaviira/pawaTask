@@ -4,54 +4,52 @@
     title="New task"
     @closed="emit('closed')"
   >
-    <div style="margin-top: 20px">
-      <InputWrapper
-        v-model.trim="createTaskForm.title"
-        :validator="$v.title"
-        label="Title"
-        placeholder="Title"
-        type="input"
-      />
+    <InputWrapper
+      v-model.trim="createTaskForm.title"
+      :validator="$v.title"
+      label="Title"
+      placeholder="Title"
+      type="input"
+    />
 
-      <InputWrapper
-        v-model.trim="createTaskForm.description"
-        :validator="$v.description"
-        label="Description"
-        placeholder="Enter some description..."
-        type="textarea"
-      />
+    <InputWrapper
+      v-model.trim="createTaskForm.description"
+      :validator="$v.description"
+      label="Description"
+      placeholder="Enter some description..."
+      type="textarea"
+    />
 
-      <InputWrapper
-        v-model.trim="createTaskForm.dueDate"
-        :validator="$v.dueDate"
-        label="Set due date"
-        placeholder="date"
-        type="date"
-      />
+    <InputWrapper
+      v-model.trim="createTaskForm.dueDate"
+      :validator="$v.dueDate"
+      label="Set due date"
+      placeholder="date"
+      type="date"
+    />
 
-      <InputWrapper
-        v-model.trim="createTaskForm.priority"
-        :validator="$v.priority"
-        label="Priority"
-        placeholder="Select task priority..."
-        type="select"
-        :select-options="priorityOptions"
-      />
+    <InputWrapper
+      v-model.trim="createTaskForm.priority"
+      :validator="$v.priority"
+      label="Priority"
+      placeholder="Select task priority..."
+      type="select"
+      :select-options="priorityOptions"
+    />
 
-      <InputWrapper
-        v-model.trim="createTaskForm.comments"
-        :validator="$v.description"
-        label="Comments"
-        placeholder="Enter some comments (optional)..."
-        type="textarea"
-      />
+    <InputWrapper
+      v-model.trim="createTaskForm.comments"
+      :validator="$v.description"
+      label="Comments"
+      placeholder="Enter some comments (optional)..."
+      type="textarea"
+    />
 
-      <SubmitButton
-        style="float: right"
-        text="Add a new task"
-        @submit="submitForm"
-      />
-    </div>
+    <SubmitButton
+      style="float: right"
+      text="Add a new task"
+      @submit="submitForm"
+    />
   </ModalWrapper>
 </template>
 
