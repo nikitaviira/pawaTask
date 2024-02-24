@@ -14,6 +14,10 @@ html, body, #app {
   box-sizing: border-box;
 }
 
+p {
+  margin: 0;
+}
+
 input, button {
   all: unset;
 }

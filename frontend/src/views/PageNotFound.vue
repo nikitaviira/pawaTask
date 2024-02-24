@@ -26,38 +26,38 @@
 </script>
 
 <style lang="scss" scoped>
-.container {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  height: 100%;
+  .container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
 
-  .text-box {
-    padding: 2rem;
-    width: 100%;
-    max-width: 35rem;
-    text-align: center;
-    background: white;
+    .text-box {
+      padding: 2rem;
+      width: 100%;
+      max-width: 35rem;
+      text-align: center;
+      background: white;
 
-    .title {
-      margin-bottom: 1rem;
-      font-size: clamp(1.5rem, 4vw, 2.25rem);
-    }
+      .title {
+        margin-bottom: 1rem;
+        font-size: clamp(1.5rem, 4vw, 2.25rem);
+      }
 
-    .sub-title {
-      margin-bottom: 1rem;
-      font-size: clamp(0.9rem, 2.5vw, 1.125rem);
-    }
+      .sub-title {
+        margin-bottom: 1rem;
+        font-size: clamp(0.9rem, 2.5vw, 1.125rem);
+      }
 
-    .nav-link {
-      color: #3B82F6;
-      cursor: pointer;
+      .nav-link {
+        color: #3B82F6;
+        cursor: pointer;
 
-      &:hover {
-        text-decoration: underline;
+        &:hover {
+          text-decoration: underline;
+        }
       }
     }
   }
-}
 </style>
