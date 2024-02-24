@@ -1,18 +1,18 @@
 <template>
   <AuthForm @submit="submitForm">
     <InputWrapper
-      id="email"
       v-model.trim="loginForm.email"
       type="text"
       label="Email"
+      placeholder="Email"
       :validator="$v.email"
     />
 
     <InputWrapper
-      id="password"
       v-model.trim="loginForm.password"
       type="password"
       label="Password"
+      placeholder="Password"
       :validator="$v.password"
     />
   </AuthForm>

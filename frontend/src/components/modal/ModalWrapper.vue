@@ -21,6 +21,7 @@
               @click="closeModal"
             />
           </div>
+          <slot />
         </div>
       </div>
     </Transition>
@@ -88,13 +89,11 @@
 
     .modal-content {
       width: 480px;
-      height: 500px;
+      min-height: 500px;
       background: white;
+      padding: 20px;
 
       .modal-header {
-        padding-left: 20px;
-        padding-right: 20px;
-        padding-top: 20px;
         display: flex;
         justify-content: space-between;
         gap: 20px;

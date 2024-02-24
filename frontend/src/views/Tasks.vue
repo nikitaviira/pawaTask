@@ -4,26 +4,24 @@
       <p class="brand">
         pawaTask
       </p>
-      <button
-        class="add-task"
-        @click="showAddTaskModal = true"
-      >
-        Add a new task
-      </button>
+      <SubmitButton
+        text="Add a new task"
+        @submit="showAddTaskModal = true"
+      />
     </div>
     <hr>
     <span>You do not have any tasks.</span> <span class="add-task-link">Add a new task</span>
   </div>
-  <Modal
+  <CreateTaskModal
     :show="showAddTaskModal"
-    title="Don't forget to throw the garbage out"
     @closed="showAddTaskModal = false"
   />
 </template>
 
 <script setup lang="ts">
-  import Modal from '@/components/modal/Modal.vue';
   import { ref } from 'vue';
+  import CreateTaskModal from '@/components/modal/CreateTaskModal.vue';
+  import SubmitButton from '@/components/buttons/SubmitButton.vue';
 
   const showAddTaskModal = ref(false);
 </script>
@@ -55,15 +53,6 @@
       width: 100%;
       top: 0;
     }
-  }
-
-  .add-task {
-    background: $main-color;
-    color: white;
-    padding: 5px 15px;
-    font-size: 14px;
-    cursor: pointer;
-    font-weight: bold;
   }
 
   .add-task-link {

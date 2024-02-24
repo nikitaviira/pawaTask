@@ -1,26 +1,26 @@
 <template>
   <AuthForm @submit="submitForm">
     <InputWrapper
-      id="email"
       v-model.trim="registerForm.email"
       type="text"
       label="Email"
       :validator="$v.email"
+      placeholder="Email"
     />
 
     <InputWrapper
-      id="password"
       v-model.trim="registerForm.password"
       type="password"
       label="Password"
+      placeholder="Password"
       :validator="$v.password"
     />
 
     <InputWrapper
-      id="repeatedPassword"
       v-model.trim="registerForm.repeatedPassword"
       type="password"
       label="Repeat password"
+      placeholder="Repeat password"
       :validator="$v.repeatedPassword"
     />
   </AuthForm>

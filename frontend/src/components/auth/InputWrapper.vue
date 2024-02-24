@@ -1,14 +1,59 @@
 <template>
   <div class="input-wrapper">
-    <label for="repeat-password">{{ label }}</label>
+    <label>{{ label }}:</label>
+
     <input
-      :id="id"
+      v-if="type === 'input'"
       :class="{'validation-error': validator.$error}"
       :value="modelValue"
-      :placeholder="label"
-      :type="type"
+      :placeholder="placeholder"
+      type="text"
       @input="updateValue"
     >
+
+    <input
+      v-if="type === 'date'"
+      :class="{'validation-error': validator.$error}"
+      :value="modelValue"
+      :placeholder="placeholder"
+      type="date"
+      :min="new Date().toISOString().split('T')[0]"
+      @input="updateValue"
+      @focus.prevent="validator.$touch()"
+    >
+
+    <textarea
+      v-else-if="type === 'textarea'"
+      :class="{'validation-error': validator.$error}"
+      :value="modelValue"
+      :placeholder="placeholder"
+      @input="updateValue"
+    />
+
+    <select
+      v-else-if="type === 'select'"
+      :class="{'validation-error': validator.$error}"
+      :value="modelValue"
+      @change="updateValue"
+      @focus="validator.$touch()"
+    >
+      <option
+        selected
+        disabled
+        hidden
+        value=""
+      >
+        {{ placeholder }}
+      </option>
+      <option
+        v-for="(value, key) in selectOptions"
+        :key="key"
+        :value="value"
+      >
+        {{ key }}
+      </option>
+    </select>
+
     <Transition mode="out-in">
       <p
         v-if="validator.$dirty && validator.$errors.length > 0"
@@ -26,11 +71,12 @@
 
   const emit = defineEmits<{ (e: 'update:modelValue', value: string): void }>();
   const props = defineProps<{
-    id: string,
-    modelValue: string,
+    modelValue: any,
     label: string,
+    placeholder: string,
     type: string,
-    validator: Validation
+    validator: Validation,
+    selectOptions?: Record<string, any>
   }>();
 
   const updateValue = (e: Event) => {
@@ -47,19 +93,66 @@
     flex-direction: column;
     display: flex;
     position: relative;
-    height: 95px;
 
     input {
-      padding-top: 15px;
-      padding-bottom: 15px;
-      padding-left: 20px;
+      padding: 10px 15px;
       background: $input-color;
       border-radius: 10px;
       align-self: stretch;
 
-      &.validation-error {
-        outline: 2px solid $validation-error-color;
+      &:last-child {
+        margin-bottom: 23px;
       }
+
+      &:focus {
+        outline: 2px solid black;
+      }
+    }
+
+    textarea {
+      padding: 10px 15px;
+      overflow-wrap: break-word;
+      border-radius: 10px;
+      background: $input-color;
+      height: 80px;
+      border: 0;
+
+      &:last-child {
+        margin-bottom: 23px;
+      }
+
+      &:focus {
+        outline: 2px solid black;
+      }
+    }
+
+    select {
+      background: $input-color;
+      padding: 10px 15px;
+      border-radius: 10px;
+      color: grey;
+
+      &:last-child {
+        margin-bottom: 23px;
+      }
+    }
+
+    select option {
+      color: black;
+    }
+
+    select:has(option:checked:not([value])),
+    select:has(option:checked:not([value=""])) {
+      color: black;
+    }
+
+    select:has(option:checked:not([value])) option,
+    select:has(option:checked:not([value=""])) option {
+      color: black;
+    }
+
+    .validation-error {
+      outline: 2px solid $validation-error-color !important;
     }
 
     label {
@@ -79,7 +172,7 @@
   }
 
   .input-wrapper + .input-wrapper {
-    margin-top: 10px;
+    margin-top: 5px;
   }
 
   .v-enter-active,
