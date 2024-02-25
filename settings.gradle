@@ -1,0 +1,3 @@
+rootProject.name = 'pawatask'
+include ':auth-service'
+include ':task-service'
