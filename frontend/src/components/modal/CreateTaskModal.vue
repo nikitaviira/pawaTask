@@ -2,7 +2,7 @@
   <ModalWrapper
     :show="show"
     title="New task"
-    @closed="emit('closed')"
+    @closed="closeModal"
   >
     <InputWrapper
       v-model.trim="taskForm.title"
@@ -39,7 +39,7 @@
 
     <InputWrapper
       v-model.trim="taskForm.comments"
-      :validator="$v.description"
+      :validator="$v.comments"
       label="Comments"
       placeholder="Enter some comments (optional)..."
       type="textarea"
@@ -62,7 +62,11 @@
   import useVuelidate from '@vuelidate/core';
   import SubmitButton from '@/components/buttons/SubmitButton.vue';
 
-  const emit = defineEmits<{ (e: 'closed'): void }>();
+  const emit = defineEmits<{
+    (e: 'closed'): void,
+    (e: 'refresh-tasks'): void
+  }>();
+
   const props = defineProps<{
     show: boolean,
     taskId: number | null
@@ -104,6 +108,8 @@
     await $v.value.$validate().then(async(result) => {
       if (result) {
         await taskController.saveTask(taskForm.value);
+        emit('refresh-tasks');
+        closeModal();
       }
     });
   }
@@ -111,5 +117,19 @@
   async function loadTask(taskId: number) {
     const { data } = await taskController.task(taskId);
     taskForm.value = data;
+  }
+
+  function closeModal() {
+    taskForm.value = {
+      id: null,
+      title: '',
+      description: '',
+      dueDate: '',
+      priority: null,
+      comments: ''
+    };
+
+    $v.value.$reset();
+    emit('closed');
   }
 </script>
