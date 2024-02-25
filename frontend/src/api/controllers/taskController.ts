@@ -8,6 +8,14 @@ export enum TaskPriority {
   CRITICAL = 'CRITICAL'
 }
 
+export enum TaskSortOrder {
+  DEFAULT = 'DEFAULT',
+  PRIORITY_ASC = 'PRIORITY_ASC',
+  PRIORITY_DESC = 'PRIORITY_DESC',
+  DUE_DATE_ASC = 'DUE_DATE_ASC',
+  DUE_DATE_DESC = 'DUE_DATE_DESC'
+}
+
 export interface SaveTaskDto {
   id: number | null;
   title: string;
@@ -21,11 +29,12 @@ export interface TaskDto {
   id: number;
   title: string;
   dueDate: string;
+  priority: TaskPriority;
 }
 
 export default {
-  tasks(): Promise<AxiosResponse<TaskDto>> {
-    return apiClient().get('/tasks');
+  tasks(sortOrder: TaskSortOrder): Promise<AxiosResponse<TaskDto[]>> {
+    return apiClient().get('/tasks', { params: { sortOrder } });
   },
 
   task(taskId: number): Promise<AxiosResponse<SaveTaskDto>> {
@@ -34,5 +43,9 @@ export default {
 
   saveTask(task: SaveTaskDto): Promise<AxiosResponse<void>> {
     return apiClient().post('/task/save', task);
+  },
+
+  deleteTasks(taskIds: number[]): Promise<AxiosResponse<void>> {
+    return apiClient().post('/tasks/delete', taskIds);
   },
 };
