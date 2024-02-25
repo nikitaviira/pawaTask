@@ -1,8 +1,11 @@
 <template>
-  <button class="icon-btn">
+  <button
+    :style="{background: btnColor ? btnColor : 'revert-layer'}"
+    class="icon-btn"
+  >
     <Component
       :is="iconComponent"
-      :style="{fill: color}"
+      :style="{fill: iconColor}"
     />
   </button>
 </template>
@@ -10,7 +13,11 @@
 <script setup lang="ts">
   import { defineAsyncComponent } from 'vue';
 
-  const props = defineProps<{ icon: string, color: string }>();
+  const props = defineProps<{
+    icon: string,
+    iconColor: string,
+    btnColor?: string
+  }>();
   const iconComponent: any = defineAsyncComponent(() => import(`../icons/${props.icon}-icon.vue`));
 </script>
 
