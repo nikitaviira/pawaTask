@@ -115,7 +115,7 @@
       }
 
       &.slide-out {
-        animation: slideOut 0.3s ease forwards;
+        animation: slideOut 0.5s ease forwards;
       }
     }
 
@@ -143,6 +143,7 @@
         padding-right: 20px;
         padding-bottom: 20px;
         overflow-y: scroll;
+        scrollbar-width: none;
       }
     }
   }
@@ -165,8 +166,11 @@
     }
   }
 
-  .v-enter-active,
   .v-leave-active {
+    transition: opacity 0.5s ease;
+  }
+
+  .v-enter-active {
     transition: opacity 0.3s ease;
   }
 
