@@ -14,9 +14,10 @@
   .submit-btn {
     background: $main-color;
     color: white;
-    padding: 5px 15px;
-    font-size: 14px;
+    padding: 0 15px;
+    font-size: 13px;
     cursor: pointer;
     font-weight: bold;
+    text-align: center;
   }
 </style>

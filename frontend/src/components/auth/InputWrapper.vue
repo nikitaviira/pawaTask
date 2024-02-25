@@ -1,6 +1,6 @@
 <template>
   <div class="input-wrapper">
-    <label>{{ label }}:</label>
+    <label v-if="label">{{ label }}:</label>
 
     <input
       v-if="type === 'input' || type === 'input-password'"
@@ -72,7 +72,7 @@
   const emit = defineEmits<{ (e: 'update:modelValue', value: string): void }>();
   const props = defineProps<{
     modelValue: any,
-    label: string,
+    label?: string,
     placeholder: string,
     type: string,
     validator: Validation,

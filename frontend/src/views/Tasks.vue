@@ -65,7 +65,7 @@
             {{ task.title }}
           </div>
           <div class="priority">
-            {{ task.priority }}
+            {{ priorityConversion[task.priority] }}
           </div>
           <div class="date">
             <img
@@ -78,6 +78,7 @@
             <ButtonWithIcon
               icon-color="white"
               icon="message"
+              @click="openTaskDetailsModal(task.id)"
             />
             <ButtonWithIcon
               icon-color="white"
@@ -88,24 +89,37 @@
         </div>
       </div>
     </div>
+    <CreateTaskModal
+      :show="showSaveTaskModal"
+      :task-id="selectedTaskId"
+      @closed="closeSaveTaskModal"
+      @refresh-tasks="loadTasks"
+    />
+
+    <TaskDetailsModal
+      :show="showTaskDetailsModal"
+      :task-id="selectedTaskId"
+      @closed="closeTaskDetailsModal"
+    />
   </div>
-  <CreateTaskModal
-    :show="showSaveTaskModal"
-    :task-id="selectedTaskId"
-    @closed="closeSaveTaskModal"
-    @refresh-tasks="loadTasks"
-  />
 </template>
 
 <script setup lang="ts">
   import { ref } from 'vue';
   import CreateTaskModal from '@/components/modal/CreateTaskModal.vue';
   import SubmitButton from '@/components/buttons/SubmitButton.vue';
-  import taskController, { type TaskDto, TaskPriority, TaskSortOrder } from '@/api/controllers/taskController';
+  import taskController, {
+    priorityConversion,
+    type TaskDto,
+    TaskPriority,
+    TaskSortOrder
+  } from '@/api/controllers/taskController';
   import ButtonWithIcon from '@/components/buttons/ButtonWithIcon.vue';
+  import TaskDetailsModal from '@/components/modal/TaskDetailsModal.vue';
 
   const taskContainerRef = ref<HTMLElement | null>(null);
   const showSaveTaskModal = ref(false);
+  const showTaskDetailsModal = ref(false);
   const selectedTaskId = ref<number | null>(null);
   const selectedForDeleteTaskIds = ref<number[]>([]);
   const sortOrder = ref<TaskSortOrder>(TaskSortOrder.DEFAULT);
@@ -115,112 +129,7 @@
       title: 'Task title lorem ipsum task title dolor',
       dueDate: '01.01.2019',
       priority: TaskPriority.HIGH
-    },
-    {
-      id: 10,
-      title: 'Task title lorem ipsum task title dolor',
-      dueDate: '01.01.2019',
-      priority: TaskPriority.HIGH
-    },
-    {
-      id: 10,
-      title: 'Task title lorem ipsum task title dolor',
-      dueDate: '01.01.2019',
-      priority: TaskPriority.HIGH
-    },
-    {
-      id: 10,
-      title: 'Task title lorem ipsum task title dolor',
-      dueDate: '01.01.2019',
-      priority: TaskPriority.HIGH
-    },
-    {
-      id: 10,
-      title: 'Task title lorem ipsum task title dolor',
-      dueDate: '01.01.2019',
-      priority: TaskPriority.HIGH
-    },
-    {
-      id: 10,
-      title: 'Task title lorem ipsum task title dolor',
-      dueDate: '01.01.2019',
-      priority: TaskPriority.HIGH
-    },
-    {
-      id: 10,
-      title: 'Task title lorem ipsum task title dolor',
-      dueDate: '01.01.2019',
-      priority: TaskPriority.HIGH
-    }, {
-      id: 10,
-      title: 'Task title lorem ipsum task title dolor',
-      dueDate: '01.01.2019',
-      priority: TaskPriority.HIGH
-    }, {
-      id: 10,
-      title: 'Task title lorem ipsum task title dolor',
-      dueDate: '01.01.2019',
-      priority: TaskPriority.HIGH
-    },
-    {
-      id: 10,
-      title: 'Task title lorem ipsum task title dolor',
-      dueDate: '01.01.2019',
-      priority: TaskPriority.HIGH
-    },
-    {
-      id: 10,
-      title: 'Task title lorem ipsum task title dolor',
-      dueDate: '01.01.2019',
-      priority: TaskPriority.HIGH
-    },
-    {
-      id: 10,
-      title: 'Task title lorem ipsum task title dolor',
-      dueDate: '01.01.2019',
-      priority: TaskPriority.HIGH
-    },
-    {
-      id: 10,
-      title: 'Task title lorem ipsum task title dolor',
-      dueDate: '01.01.2019',
-      priority: TaskPriority.HIGH
-    },
-    {
-      id: 10,
-      title: 'Task title lorem ipsum task title dolor',
-      dueDate: '01.01.2019',
-      priority: TaskPriority.HIGH
-    },
-    {
-      id: 10,
-      title: 'Task title lorem ipsum task title dolor',
-      dueDate: '01.01.2019',
-      priority: TaskPriority.HIGH
-    }, {
-      id: 10,
-      title: 'Task title lorem ipsum task title dolor',
-      dueDate: '01.01.2019',
-      priority: TaskPriority.HIGH
-    }, {
-      id: 10,
-      title: 'Task title lorem ipsum task title dolor',
-      dueDate: '01.01.2019',
-      priority: TaskPriority.HIGH
-    },
-    {
-      id: 10,
-      title: 'Task title lorem ipsum task title dolor',
-      dueDate: '01.01.2019',
-      priority: TaskPriority.HIGH
-    },
-    {
-      id: 10,
-      title: 'Task title lorem ipsum task title dolor',
-      dueDate: '01.01.2019',
-      priority: TaskPriority.HIGH
-    }
-  ]);
+    }]);
 
   // onBeforeMount(() => {
   //   loadTasks();
@@ -234,6 +143,16 @@
   function closeSaveTaskModal() {
     selectedTaskId.value = null;
     showSaveTaskModal.value = false;
+  }
+
+  function openTaskDetailsModal(taskId: number) {
+    selectedTaskId.value = taskId;
+    showTaskDetailsModal.value = true;
+  }
+
+  function closeTaskDetailsModal() {
+    selectedTaskId.value = null;
+    showTaskDetailsModal.value = false;
   }
 
   async function loadTasks() {
