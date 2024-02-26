@@ -1,19 +1,16 @@
 package com.pawatask.gateway.config;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.cloud.gateway.route.RouteLocator;
 import org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
+@RequiredArgsConstructor
 public class RouteConfig {
   private final ServiceUrls serviceUrls;
   private final AuthFilter authFilter;
-
-  public RouteConfig(ServiceUrls serviceUrls, AuthFilter authFilter) {
-    this.serviceUrls = serviceUrls;
-    this.authFilter = authFilter;
-  }
 
   @Bean
   public RouteLocator routeLocator(RouteLocatorBuilder builder) {
