@@ -3,10 +3,10 @@ package com.pawatask.auth.user;
 import com.pawatask.auth.dto.CredentialsDto;
 import com.pawatask.auth.dto.LoginRequestDto;
 import com.pawatask.auth.dto.RegisterRequestDto;
+import com.pawatask.auth.exception.ServiceException;
 import com.pawatask.auth.util.JwtGeneration;
 import com.pawatask.auth.util.PasswordHashing;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.service.spi.ServiceException;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -48,8 +48,7 @@ public class UserService {
   }
 
   private CredentialsDto createCredentialsResponse(User user) {
-    String jwt = jwtGeneration.generate(user);
-    return new CredentialsDto(jwt, user.getEmail(), user.getUserName());
+    return new CredentialsDto(jwtGeneration.generate(user));
   }
 
   private ServiceException invalidCredentials() {

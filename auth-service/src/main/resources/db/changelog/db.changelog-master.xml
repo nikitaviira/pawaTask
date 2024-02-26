@@ -32,4 +32,8 @@
     <changeSet id="1708942063406" author="Nikita Viira">
         <dropNotNullConstraint tableName="users" columnName="created_at" columnDataType="TIMESTAMP" />
     </changeSet>
+
+    <changeSet id="1708946596245" author="Nikita Viira">
+        <addUniqueConstraint tableName="users" columnNames="email" />
+    </changeSet>
 </databaseChangeLog>

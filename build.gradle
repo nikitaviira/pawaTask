@@ -35,6 +35,7 @@ subprojects {
 		imports {
 			mavenBom SpringBootPlugin.BOM_COORDINATES
 			mavenBom "org.junit:junit-bom:${junit_bom_version}"
+			mavenBom "org.testcontainers:testcontainers-bom:${test_containers_version}"
 		}
 	}
 
@@ -46,6 +47,8 @@ subprojects {
 		implementation 'org.liquibase:liquibase-core'
 
 		testImplementation 'org.springframework.boot:spring-boot-starter-test'
+		testImplementation 'org.testcontainers:junit-jupiter'
+		testImplementation 'org.testcontainers:mysql'
 	}
 
 	test {
