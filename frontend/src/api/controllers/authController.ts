@@ -12,7 +12,6 @@ export interface RegistrationCredentials extends Credentials {
 
 export interface AuthResponse {
   jwtToken: string;
-  email: string;
 }
 
 export default {

@@ -4,11 +4,10 @@ import authController from '@/api/controllers/authController';
 
 export const useUserStore = defineStore('user', {
   state: () => ({
-    token: localStorage.getItem('jwt'),
-    email: localStorage.getItem('email')
+    jwtToken: localStorage.getItem('jwtToken'),
   }),
   getters: {
-    isLoggedIn: (state) => !!state.token
+    isLoggedIn: (state) => !!state.jwtToken
   },
   actions: {
     async register(credentials: Credentials) {
@@ -33,16 +32,12 @@ export const useUserStore = defineStore('user', {
       this.removeUserInfo();
     },
     setUserInfo(payload: AuthResponse) {
-      localStorage.setItem('jwt', payload.jwtToken);
-      localStorage.setItem('email', payload.email);
-      this.token = payload.jwtToken;
-      this.email = payload.email;
+      localStorage.setItem('jwtToken', payload.jwtToken);
+      this.jwtToken = payload.jwtToken;
     },
     removeUserInfo() {
-      localStorage.removeItem('jwt');
-      localStorage.removeItem('email');
-      this.token = '';
-      this.email = '';
+      localStorage.removeItem('jwtToken');
+      this.jwtToken = '';
     }
   }
 });
