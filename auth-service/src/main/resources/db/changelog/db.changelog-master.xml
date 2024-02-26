@@ -24,4 +24,12 @@
             </column>
         </createTable>
     </changeSet>
+
+    <changeSet id="1708942005378" author="Nikita Viira">
+        <modifyDataType tableName="users" columnName="id" newDataType="BIGINT AUTO_INCREMENT"/>
+    </changeSet>
+
+    <changeSet id="1708942063406" author="Nikita Viira">
+        <dropNotNullConstraint tableName="users" columnName="created_at" columnDataType="TIMESTAMP" />
+    </changeSet>
 </databaseChangeLog>
