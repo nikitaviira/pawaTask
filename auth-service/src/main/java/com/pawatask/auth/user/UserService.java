@@ -4,12 +4,16 @@ import com.pawatask.auth.dto.CredentialsDto;
 import com.pawatask.auth.dto.LoginRequestDto;
 import com.pawatask.auth.dto.RegisterRequestDto;
 import com.pawatask.auth.exception.ServiceException;
+import com.pawatask.auth.kafka.KafkaMessageProducer;
 import com.pawatask.auth.util.JwtGeneration;
 import com.pawatask.auth.util.PasswordHashing;
+import com.pawatask.kafka.UserCreatedMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+
+import static com.pawatask.kafka.KafkaTopics.USER_CREATED;
 
 @Service
 @RequiredArgsConstructor
@@ -17,6 +21,7 @@ public class UserService {
   private final UserRepository userRepository;
   private final JwtGeneration jwtGeneration;
   private final PasswordHashing passwordHashing;
+  private final KafkaMessageProducer kafkaMessageProducer;
 
   public CredentialsDto register(RegisterRequestDto request) {
     Optional<User> existingUser = userRepository.findByEmail(request.email());
@@ -31,6 +36,7 @@ public class UserService {
     newUser.setEmail(request.email());
     newUser.setHashedPassword(hashedPassword);
     userRepository.save(newUser);
+    notifyUserCreated(newUser);
 
     return createCredentialsResponse(newUser);
   }
@@ -49,6 +55,11 @@ public class UserService {
 
   private CredentialsDto createCredentialsResponse(User user) {
     return new CredentialsDto(jwtGeneration.generate(user));
+  }
+
+  private void notifyUserCreated(User user) {
+    kafkaMessageProducer.sendMessage(USER_CREATED,
+        new UserCreatedMessage(user.getId(), user.getUserName(), user.getEmail()));
   }
 
   private ServiceException invalidCredentials() {

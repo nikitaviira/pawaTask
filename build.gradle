@@ -31,11 +31,16 @@ subprojects {
 		mavenCentral()
 	}
 
+	if (name in excludedSubprojects.split(',')) {
+		return
+	}
+
 	dependencyManagement {
 		imports {
 			mavenBom SpringBootPlugin.BOM_COORDINATES
 			mavenBom "org.junit:junit-bom:${junit_bom_version}"
 			mavenBom "org.testcontainers:testcontainers-bom:${test_containers_version}"
+			mavenBom "org.springframework.kafka:spring-kafka-bom:${spring_kafka_version}"
 		}
 	}
 
