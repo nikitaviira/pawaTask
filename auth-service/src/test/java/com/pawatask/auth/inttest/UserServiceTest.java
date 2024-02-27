@@ -4,16 +4,23 @@ import com.pawatask.auth.user.User;
 import com.pawatask.auth.user.UserRepository;
 import com.pawatask.auth.util.IntTestBase;
 import com.pawatask.auth.util.PasswordHashing;
+import com.pawatask.kafka.UserCreatedMessage;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Optional;
 
+import static com.pawatask.kafka.KafkaTopics.Names.USER_CREATED;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -26,6 +33,8 @@ class UserServiceTest extends IntTestBase {
   private UserRepository userRepository;
   @Autowired
   private PasswordHashing passwordHashing;
+  @MockBean
+  private KafkaTemplate<String, Object> kafkaProducer;
 
   @Test
   public void register_success() throws Exception {
@@ -47,6 +56,8 @@ class UserServiceTest extends IntTestBase {
     assertThat(user.get().getEmail()).isEqualTo("email@mail.ru");
     assertThat(user.get().getUserName()).isEqualTo("somename");
     assertTrue(passwordHashing.validatePassword("mega", user.get().getHashedPassword()));
+
+    verify(kafkaProducer).send(USER_CREATED, new UserCreatedMessage(1L, "somename", "email@mail.ru"));
   }
 
   @Test
@@ -65,6 +76,7 @@ class UserServiceTest extends IntTestBase {
         .andExpect(jsonPath("$.message", is("User with such email already exists")));
 
     assertThat(userRepository.count()).isEqualTo(1);
+    verify(kafkaProducer, never()).send(any(), any());
   }
 
   @Test
