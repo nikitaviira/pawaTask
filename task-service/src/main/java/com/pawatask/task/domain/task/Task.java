@@ -8,11 +8,10 @@ import org.hibernate.annotations.NotFound;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 import static jakarta.persistence.CascadeType.ALL;
-import static jakarta.persistence.ConstraintMode.NO_CONSTRAINT;
 import static jakarta.persistence.GenerationType.IDENTITY;
 import static org.hibernate.annotations.NotFoundAction.IGNORE;
 
@@ -38,11 +37,10 @@ public class Task {
 
   @ManyToOne
   @JoinColumn(
-      name="created_user_id",
+      name = "created_user_id",
       referencedColumnName = "id",
       insertable = false,
-      updatable = false,
-      foreignKey = @ForeignKey(value = NO_CONSTRAINT, name = "none")
+      updatable = false
   )
   @NotFound(action = IGNORE)
   @Nullable
@@ -50,16 +48,20 @@ public class Task {
 
   @ManyToOne
   @JoinColumn(
-      name="last_edited_user_id",
+      name = "last_edited_user_id",
       referencedColumnName = "id",
       insertable = false,
-      updatable = false,
-      foreignKey = @ForeignKey(value = NO_CONSTRAINT, name = "none")
+      updatable = false
   )
   @NotFound(action = IGNORE)
   @Nullable
   private UserDetails lastEditedBy;
 
   @OneToMany(cascade = ALL, orphanRemoval = true, mappedBy = "task")
-  private Set<TaskComment> comments = new HashSet<>();
+  private List<TaskComment> comments = new ArrayList<>();
+
+  public void addComment(TaskComment taskComment) {
+    comments.add(taskComment);
+    taskComment.setTask(this);
+  }
 }

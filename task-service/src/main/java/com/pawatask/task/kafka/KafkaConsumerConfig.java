@@ -31,7 +31,7 @@ public class KafkaConsumerConfig {
         Map<String, Object> props = new HashMap<>();
         props.put(BOOTSTRAP_SERVERS_CONFIG, kafkaBootstrapServers);
         props.put(GROUP_ID_CONFIG, kafkaConsumerGroupId);
-        props.put(AUTO_OFFSET_RESET_CONFIG, "earliest");
+        props.put(AUTO_OFFSET_RESET_CONFIG, "latest");
         props.put(KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         props.put(VALUE_DESERIALIZER_CLASS_CONFIG, ErrorHandlingDeserializer.class);
         props.put(VALUE_DESERIALIZER_CLASS, JsonDeserializer.class);

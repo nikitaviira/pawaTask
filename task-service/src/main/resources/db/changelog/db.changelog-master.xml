@@ -56,12 +56,6 @@
             <column name="created_user_id" type="bigint">
                 <constraints nullable="false"/>
             </column>
-            <column name="task_id" type="bigint">
-                <constraints
-                        references="tasks(id)"
-                        nullable="false"
-                        foreignKeyName="fk_task_comments__task_id"/>
-            </column>
         </createTable>
     </changeSet>
 </databaseChangeLog>

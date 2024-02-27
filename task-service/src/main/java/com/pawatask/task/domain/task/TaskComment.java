@@ -8,7 +8,6 @@ import org.hibernate.annotations.NotFound;
 
 import java.time.LocalDateTime;
 
-import static jakarta.persistence.ConstraintMode.NO_CONSTRAINT;
 import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.IDENTITY;
 import static org.hibernate.annotations.NotFoundAction.IGNORE;
@@ -29,11 +28,10 @@ public class TaskComment {
 
   @ManyToOne
   @JoinColumn(
-      name="created_user_id",
+      name = "created_user_id",
       referencedColumnName = "id",
       insertable = false,
-      updatable = false,
-      foreignKey = @ForeignKey(value = NO_CONSTRAINT, name = "none")
+      updatable = false
   )
   @NotFound(action = IGNORE)
   @Nullable
