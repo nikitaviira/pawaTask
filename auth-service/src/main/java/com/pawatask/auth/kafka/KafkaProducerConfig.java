@@ -14,7 +14,7 @@ import org.springframework.kafka.support.serializer.JsonSerializer;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.pawatask.kafka.KafkaTopics.Names.USER_CREATED;
+import static com.pawatask.kafka.KafkaTopics.Names.USER;
 import static org.apache.kafka.clients.producer.ProducerConfig.*;
 
 @Configuration
@@ -38,7 +38,7 @@ public class KafkaProducerConfig {
     }
 
     @Bean
-    public NewTopic userCreatedTopic() {
-        return TopicBuilder.name(USER_CREATED).build();
+    public NewTopic userTopic() {
+        return TopicBuilder.name(USER).partitions(3).replicas(2).build();
     }
 }

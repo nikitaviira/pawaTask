@@ -14,7 +14,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Optional;
 
-import static com.pawatask.kafka.KafkaTopics.Names.USER_CREATED;
+import static com.pawatask.kafka.KafkaTopics.Names.USER;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -57,7 +57,7 @@ class UserServiceTest extends IntTestBase {
     assertThat(user.get().getUserName()).isEqualTo("somename");
     assertTrue(passwordHashing.validatePassword("mega", user.get().getHashedPassword()));
 
-    verify(kafkaProducer).send(USER_CREATED, new UserCreatedMessage(1L, "somename", "email@mail.ru"));
+    verify(kafkaProducer).send(USER, new UserCreatedMessage(1L, "somename", "email@mail.ru"));
   }
 
   @Test

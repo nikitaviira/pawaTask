@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
-import static com.pawatask.kafka.KafkaTopics.USER_CREATED;
+import static com.pawatask.kafka.KafkaTopics.USER;
 
 @Service
 @RequiredArgsConstructor
@@ -58,7 +58,7 @@ public class UserService {
   }
 
   private void notifyUserCreated(User user) {
-    kafkaMessageProducer.sendMessage(USER_CREATED,
+    kafkaMessageProducer.sendMessage(USER,
         new UserCreatedMessage(user.getId(), user.getUserName(), user.getEmail()));
   }
 

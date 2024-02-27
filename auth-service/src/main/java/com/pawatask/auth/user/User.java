@@ -19,6 +19,6 @@ public class User {
   private String email;
   @Column(name = "user_name")
   private String userName;
-  @Column(name = "created_at")
+  @Column(name = "created_at", insertable = false, updatable = false)
   private LocalDateTime createdAt;
 }

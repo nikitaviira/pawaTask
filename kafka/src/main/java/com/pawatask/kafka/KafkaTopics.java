@@ -1,12 +1,15 @@
 package com.pawatask.kafka;
 
 public enum KafkaTopics {
-    USER_CREATED(Names.USER_CREATED);
+  USER(Names.USER);
 
-    public static class Names {
-        public static final String USER_CREATED = "userCreated";
-    }
+  public final String label;
+
+  public static class Names {
+    public static final String USER = "user";
+  }
 
   KafkaTopics(String label) {
+    this.label = label;
   }
 }
