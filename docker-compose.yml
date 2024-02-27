@@ -1,0 +1,33 @@
+version: '3.9'
+
+services:
+  auth-db:
+    image: mysql:latest
+    restart: always
+    ports:
+      - "3306:3306"
+    volumes:
+      - auth_data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    networks:
+      - mysql_network
+
+  task-db:
+    image: mysql:latest
+    restart: always
+    ports:
+      - "3307:3306"
+    volumes:
+      - task_data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    networks:
+      - mysql_network
+
+networks:
+  mysql_network:
+
+volumes:
+  auth_data:
+  task_data:
