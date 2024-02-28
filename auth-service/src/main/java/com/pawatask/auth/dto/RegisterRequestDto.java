@@ -7,14 +7,14 @@ import jakarta.validation.constraints.Size;
 
 public record RegisterRequestDto(
     @NotBlank(message = "{field.mandatory}")
-    @Size(max = 255, message = "{maxLength.exceeded}")
+    @Size(max = 30, message = "{maxLength.exceeded}")
     String userName,
     @NotBlank(message = "{field.mandatory}")
     @EmailValidation
-    @Size(max = 255, message = "{maxLength.exceeded}")
+    @Size(max = 200, message = "{maxLength.exceeded}")
     String email,
     @NotBlank(message = "{field.mandatory}")
     @PasswordValidation
-    @Size(max = 255, message = "{maxLength.exceeded}")
+    @Size(max = 40, message = "{maxLength.exceeded}")
     String password
 ) {}

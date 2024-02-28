@@ -36,4 +36,9 @@
     <changeSet id="1708946596245" author="Nikita Viira">
         <addUniqueConstraint tableName="users" columnNames="email" />
     </changeSet>
+
+    <changeSet id="1709139773795" author="Nikita Viira">
+        <modifyDataType tableName="users" columnName="email" newDataType="VARCHAR(200)" />
+        <modifyDataType tableName="users" columnName="user_name" newDataType="VARCHAR(30)" />
+    </changeSet>
 </databaseChangeLog>
