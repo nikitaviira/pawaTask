@@ -1,4 +1,4 @@
-package com.pawatask.auth.user;
+package com.pawatask.auth.domain.user;
 
 import jakarta.persistence.*;
 import lombok.Data;

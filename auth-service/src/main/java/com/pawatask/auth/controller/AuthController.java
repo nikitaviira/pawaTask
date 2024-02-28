@@ -1,9 +1,9 @@
 package com.pawatask.auth.controller;
 
+import com.pawatask.auth.domain.user.UserService;
 import com.pawatask.auth.dto.CredentialsDto;
 import com.pawatask.auth.dto.LoginRequestDto;
 import com.pawatask.auth.dto.RegisterRequestDto;
-import com.pawatask.auth.user.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
