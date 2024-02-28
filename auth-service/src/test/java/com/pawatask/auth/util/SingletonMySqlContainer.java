@@ -4,18 +4,18 @@ import org.testcontainers.containers.MySQLContainer;
 
 import static java.lang.System.setProperty;
 
-public class MysqlContainer extends MySQLContainer<MysqlContainer> {
+public class SingletonMySqlContainer extends MySQLContainer<SingletonMySqlContainer> {
     private static final String IMAGE_VERSION = "mysql:latest";
 
-    private static MysqlContainer container;
+    private static SingletonMySqlContainer container;
 
-    private MysqlContainer() {
+    private SingletonMySqlContainer() {
         super(IMAGE_VERSION);
     }
 
-    public static MysqlContainer getInstance() {
+    public static SingletonMySqlContainer getInstance() {
         if (container == null) {
-            container = new MysqlContainer();
+            container = new SingletonMySqlContainer();
         }
         return container;
     }

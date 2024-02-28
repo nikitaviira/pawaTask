@@ -1,7 +1,9 @@
-package com.pawatask.auth.inttest;
+package com.pawatask.auth.integrationTest;
 
-import com.pawatask.auth.user.User;
-import com.pawatask.auth.user.UserRepository;
+import com.pawatask.auth.domain.user.User;
+import com.pawatask.auth.domain.user.UserRepository;
+import com.pawatask.auth.dto.LoginRequestDto;
+import com.pawatask.auth.dto.RegisterRequestDto;
 import com.pawatask.auth.util.IntTestBase;
 import com.pawatask.auth.util.PasswordHashing;
 import com.pawatask.kafka.UserCreatedMessage;
@@ -38,13 +40,9 @@ class UserServiceTest extends IntTestBase {
 
   @Test
   public void register_success() throws Exception {
-    String userJson = "{" +
-        "\"email\": \"email@mail.ru\", " +
-        "\"userName\": \"somename\", " +
-        "\"password\" : \"megamegA1\"}";
-
+    String body = convertObjectToJsonString(new RegisterRequestDto("somename", "email@mail.ru", "megamegA1"));
     mockMvc.perform(post("/api/auth/register")
-            .content(userJson)
+            .content(body)
             .contentType(APPLICATION_JSON))
         .andExpect(status().isOk())
         .andExpect(content().contentType(APPLICATION_JSON))
@@ -61,35 +59,11 @@ class UserServiceTest extends IntTestBase {
   }
 
   @Test
-  public void register_validationFailed() throws Exception {
-    String userJson = "{" +
-        "\"email\": \"wrong-email\", " +
-        "\"userName\": \"" + "b".repeat(256) + "\", " +
-        "\"password\" : \"abc\"}";
-
-    mockMvc.perform(post("/api/auth/register")
-            .content(userJson)
-            .contentType(APPLICATION_JSON))
-        .andExpect(status().isBadRequest())
-        .andExpect(content().contentType(APPLICATION_JSON))
-        .andExpect(jsonPath("$.fields.password").value("At least 8 chars long, one capital letter and one number"))
-        .andExpect(jsonPath("$.fields.userName").value("Exceeds maximum length of 255 symbols"))
-        .andExpect(jsonPath("$.fields.email").value("Incorrect email format"));
-
-    assertThat(userRepository.findAll()).isEmpty();
-    verify(kafkaProducer, never()).send(any(), any());
-  }
-
-  @Test
   public void register_alreadyExist() throws Exception {
     saveUser();
-    String userJson = "{" +
-        "\"email\": \"email@mail.ru\", " +
-        "\"userName\": \"somename\", " +
-        "\"password\" : \"megamegA1\"}";
-
+    String body = convertObjectToJsonString(new RegisterRequestDto("somename", "email@mail.ru", "megamegA1"));
     mockMvc.perform(post("/api/auth/register")
-            .content(userJson)
+            .content(body)
             .contentType(APPLICATION_JSON))
         .andExpect(status().isBadRequest())
         .andExpect(content().contentType(APPLICATION_JSON))
@@ -100,30 +74,27 @@ class UserServiceTest extends IntTestBase {
   }
 
   @Test
-  public void login_validationFailed() throws Exception {
-    saveUser();
-    String userJson = "{" +
-        "\"email\": \"\", " +
-        "\"password\" : \"\"}";
-
-    mockMvc.perform(post("/api/auth/login")
-            .content(userJson)
+  public void register_validationFailed() throws Exception {
+    String body = convertObjectToJsonString(new RegisterRequestDto("b".repeat(256), "wrong-email", "abc"));
+    mockMvc.perform(post("/api/auth/register")
+            .content(body)
             .contentType(APPLICATION_JSON))
         .andExpect(status().isBadRequest())
         .andExpect(content().contentType(APPLICATION_JSON))
-        .andExpect(jsonPath("$.fields.email").value("Field is mandatory"))
-        .andExpect(jsonPath("$.fields.password").value("Field is mandatory"));
+        .andExpect(jsonPath("$.fields.password").value("At least 8 chars long, one capital letter and one number"))
+        .andExpect(jsonPath("$.fields.userName").value("Exceeds maximum length of 30 symbols"))
+        .andExpect(jsonPath("$.fields.email").value("Incorrect email format"));
+
+    assertThat(userRepository.findAll()).isEmpty();
+    verify(kafkaProducer, never()).send(any(), any());
   }
 
   @Test
   public void login_success() throws Exception {
     saveUser();
-    String userJson = "{" +
-        "\"email\": \"email@mail.ru\", " +
-        "\"password\" : \"mega\"}";
-
+    String body = convertObjectToJsonString(new LoginRequestDto("email@mail.ru", "mega"));
     mockMvc.perform(post("/api/auth/login")
-            .content(userJson)
+            .content(body)
             .contentType(APPLICATION_JSON))
         .andExpect(status().isOk())
         .andExpect(content().contentType(APPLICATION_JSON))
@@ -134,12 +105,9 @@ class UserServiceTest extends IntTestBase {
   @Test
   public void login_wrongEmail() throws Exception {
     saveUser();
-    String userJson = "{" +
-        "\"email\": \"asdasdasd@mail.ru\", " +
-        "\"password\" : \"mega\"}";
-
+    String body = convertObjectToJsonString(new LoginRequestDto("asdasdasd@mail.ru", "mega"));
     mockMvc.perform(post("/api/auth/login")
-            .content(userJson)
+            .content(body)
             .contentType(APPLICATION_JSON))
         .andExpect(status().isBadRequest())
         .andExpect(content().contentType(APPLICATION_JSON))
@@ -149,16 +117,26 @@ class UserServiceTest extends IntTestBase {
   @Test
   public void login_wrongPassword() throws Exception {
     saveUser();
-    String userJson = "{" +
-        "\"email\": \"email@mail.ru\", " +
-        "\"password\" : \"asdsdas\"}";
-
+    String body = convertObjectToJsonString(new LoginRequestDto("email@mail.ru", "asdsdas"));
     mockMvc.perform(post("/api/auth/login")
-            .content(userJson)
+            .content(body)
             .contentType(APPLICATION_JSON))
         .andExpect(status().isBadRequest())
         .andExpect(content().contentType(APPLICATION_JSON))
         .andExpect(jsonPath("$.message", is("Incorrect email or password")));
+  }
+
+  @Test
+  public void login_validationFailed() throws Exception {
+    saveUser();
+    String body = convertObjectToJsonString(new LoginRequestDto("", ""));
+    mockMvc.perform(post("/api/auth/login")
+            .content(body)
+            .contentType(APPLICATION_JSON))
+        .andExpect(status().isBadRequest())
+        .andExpect(content().contentType(APPLICATION_JSON))
+        .andExpect(jsonPath("$.fields.email").value("Field is mandatory"))
+        .andExpect(jsonPath("$.fields.password").value("Field is mandatory"));
   }
 
   private void saveUser() {
