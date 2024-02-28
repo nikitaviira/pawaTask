@@ -1,10 +1,9 @@
 package com.pawatask.task.domain.task;
 
 import com.pawatask.task.domain.userDetails.UserDetails;
-import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.Data;
-import org.hibernate.annotations.NotFound;
+import lombok.ToString;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -12,12 +11,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static jakarta.persistence.CascadeType.ALL;
+import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.IDENTITY;
-import static org.hibernate.annotations.NotFoundAction.IGNORE;
 
 @Data
 @Entity
 @Table(name = "tasks")
+@ToString(exclude = {"comments", "createdBy", "lastEditedBy"})
 public class Task {
   @Id
   @GeneratedValue(strategy = IDENTITY)
@@ -30,31 +30,12 @@ public class Task {
   private LocalDate dueDate;
   private TaskPriority priority;
 
-  @Column(name = "created_user_id")
-  private Long createdByUserId;
-  @Column(name = "last_edited_user_id")
-  private Long lastEditedByUserId;
-
-  @ManyToOne
-  @JoinColumn(
-      name = "created_user_id",
-      referencedColumnName = "id",
-      insertable = false,
-      updatable = false
-  )
-  @NotFound(action = IGNORE)
-  @Nullable
+  @ManyToOne(fetch = LAZY)
+  @JoinColumn(name = "created_user_id")
   private UserDetails createdBy;
 
-  @ManyToOne
-  @JoinColumn(
-      name = "last_edited_user_id",
-      referencedColumnName = "id",
-      insertable = false,
-      updatable = false
-  )
-  @NotFound(action = IGNORE)
-  @Nullable
+  @ManyToOne(fetch = LAZY)
+  @JoinColumn(name = "last_edited_user_id")
   private UserDetails lastEditedBy;
 
   @OneToMany(cascade = ALL, orphanRemoval = true, mappedBy = "task")

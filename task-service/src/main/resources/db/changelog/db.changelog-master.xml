@@ -58,4 +58,33 @@
             </column>
         </createTable>
     </changeSet>
+
+    <changeSet id="1709129731023" author="Nikita Viira">
+        <addForeignKeyConstraint baseColumnNames="created_user_id" baseTableName="tasks"
+                                 constraintName="tasks_created_user_fk"
+                                 onDelete="CASCADE" referencedColumnNames="id" referencedTableName="user_details"/>
+    </changeSet>
+
+    <changeSet id="1709130267857" author="Nikita Viira">
+        <addForeignKeyConstraint baseColumnNames="last_edited_user_id" baseTableName="tasks"
+                                 constraintName="tasks_last_edited_user_fk"
+                                 onDelete="CASCADE" referencedColumnNames="id" referencedTableName="user_details"/>
+    </changeSet>
+
+    <changeSet id="1709130271250" author="Nikita Viira">
+        <addForeignKeyConstraint baseColumnNames="created_user_id" baseTableName="tasks"
+                                 constraintName="task_comments_created_user_fk"
+                                 onDelete="CASCADE" referencedColumnNames="id" referencedTableName="user_details"/>
+    </changeSet>
+
+    <changeSet id="1709131508545" author="Nikita Viira">
+        <addColumn tableName="task_comments">
+            <column name="task_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+        <addForeignKeyConstraint baseColumnNames="task_id" baseTableName="task_comments"
+                                 constraintName="task_comments_task_fk"
+                                 onDelete="CASCADE" referencedColumnNames="id" referencedTableName="tasks"/>
+    </changeSet>
 </databaseChangeLog>
