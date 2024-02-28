@@ -2,6 +2,7 @@ package com.pawatask.task.controller;
 
 import com.pawatask.task.domain.task.TaskService;
 import com.pawatask.task.dto.*;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,12 +29,12 @@ public class TaskController extends BaseController {
   }
 
   @PostMapping("save")
-  public void saveTask(CallerContext callerContext, @RequestBody TaskDto task) {
+  public void saveTask(CallerContext callerContext, @Valid @RequestBody TaskDto task) {
     taskService.saveTask(callerContext, task);
   }
 
   @PostMapping("comments/save")
-  public void saveComment(CallerContext callerContext, @RequestBody SaveCommentDto comment) {
+  public void saveComment(CallerContext callerContext, @Valid @RequestBody SaveCommentDto comment) {
     taskService.saveComment(callerContext, comment);
   }
 
