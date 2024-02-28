@@ -6,5 +6,5 @@ export function passwordValidation(val: string): boolean {
 }
 
 export function emailValidation(val: string): boolean {
-  return new RegExp(/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/).test(val);
+  return /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(val);
 }

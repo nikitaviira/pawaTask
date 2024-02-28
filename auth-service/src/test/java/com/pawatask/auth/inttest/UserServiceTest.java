@@ -41,7 +41,7 @@ class UserServiceTest extends IntTestBase {
     String userJson = "{" +
         "\"email\": \"email@mail.ru\", " +
         "\"userName\": \"somename\", " +
-        "\"password\" : \"mega\"}";
+        "\"password\" : \"megamegA1\"}";
 
     mockMvc.perform(post("/api/auth/register")
             .content(userJson)
@@ -55,9 +55,29 @@ class UserServiceTest extends IntTestBase {
     assertThat(user).isPresent();
     assertThat(user.get().getEmail()).isEqualTo("email@mail.ru");
     assertThat(user.get().getUserName()).isEqualTo("somename");
-    assertTrue(passwordHashing.validatePassword("mega", user.get().getHashedPassword()));
+    assertTrue(passwordHashing.validatePassword("megamegA1", user.get().getHashedPassword()));
 
     verify(kafkaProducer).send(USER, new UserCreatedMessage(1L, "somename", "email@mail.ru"));
+  }
+
+  @Test
+  public void register_validationFailed() throws Exception {
+    String userJson = "{" +
+        "\"email\": \"wrong-email\", " +
+        "\"userName\": \"" + "b".repeat(256) + "\", " +
+        "\"password\" : \"abc\"}";
+
+    mockMvc.perform(post("/api/auth/register")
+            .content(userJson)
+            .contentType(APPLICATION_JSON))
+        .andExpect(status().isBadRequest())
+        .andExpect(content().contentType(APPLICATION_JSON))
+        .andExpect(jsonPath("$.fields.password").value("At least 8 chars long, one capital letter and one number"))
+        .andExpect(jsonPath("$.fields.userName").value("Exceeds maximum length of 255 symbols"))
+        .andExpect(jsonPath("$.fields.email").value("Incorrect email format"));
+
+    assertThat(userRepository.findAll()).isEmpty();
+    verify(kafkaProducer, never()).send(any(), any());
   }
 
   @Test
@@ -66,7 +86,7 @@ class UserServiceTest extends IntTestBase {
     String userJson = "{" +
         "\"email\": \"email@mail.ru\", " +
         "\"userName\": \"somename\", " +
-        "\"password\" : \"mega\"}";
+        "\"password\" : \"megamegA1\"}";
 
     mockMvc.perform(post("/api/auth/register")
             .content(userJson)
@@ -77,6 +97,22 @@ class UserServiceTest extends IntTestBase {
 
     assertThat(userRepository.count()).isEqualTo(1);
     verify(kafkaProducer, never()).send(any(), any());
+  }
+
+  @Test
+  public void login_validationFailed() throws Exception {
+    saveUser();
+    String userJson = "{" +
+        "\"email\": \"\", " +
+        "\"password\" : \"\"}";
+
+    mockMvc.perform(post("/api/auth/login")
+            .content(userJson)
+            .contentType(APPLICATION_JSON))
+        .andExpect(status().isBadRequest())
+        .andExpect(content().contentType(APPLICATION_JSON))
+        .andExpect(jsonPath("$.fields.email").value("Field is mandatory"))
+        .andExpect(jsonPath("$.fields.password").value("Field is mandatory"));
   }
 
   @Test

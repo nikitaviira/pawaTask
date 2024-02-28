@@ -30,14 +30,13 @@ public class UserService {
     }
 
     String hashedPassword = passwordHashing.createHash(request.password());
-
     var newUser = new User();
     newUser.setUserName(request.userName());
     newUser.setEmail(request.email());
     newUser.setHashedPassword(hashedPassword);
+
     userRepository.save(newUser);
     notifyUserCreated(newUser);
-
     return createCredentialsResponse(newUser);
   }
 
