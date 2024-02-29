@@ -58,7 +58,7 @@
       >
         <div
           v-for="task in tasks"
-          :key="task.id"
+          :key="task.id!"
           class="task-container"
         >
           <input
@@ -71,7 +71,7 @@
             {{ task.title }}
           </div>
           <div class="priority">
-            {{ priorityConversion[task.priority] }}
+            {{ priorityConversion[task.priority!] }}
           </div>
           <div class="date">
             <img
@@ -84,7 +84,7 @@
             <ButtonWithIcon
               icon-color="white"
               icon="message"
-              @click="openTaskDetailsModal(task.id)"
+              @click="openTaskDetailsModal(task.id!)"
             />
             <ButtonWithIcon
               icon-color="white"
@@ -111,15 +111,10 @@
 </template>
 
 <script setup lang="ts">
-  import { ref } from 'vue';
+  import { onBeforeMount, ref, watch } from 'vue';
   import CreateTaskModal from '@/components/modal/CreateTaskModal.vue';
   import SubmitButton from '@/components/buttons/SubmitButton.vue';
-  import taskController, {
-    priorityConversion,
-    type TaskDto,
-    TaskPriority,
-    TaskSortOrder
-  } from '@/api/controllers/taskController';
+  import taskController, { priorityConversion, type TaskDto, TaskSortOrder } from '@/api/controllers/taskController';
   import ButtonWithIcon from '@/components/buttons/ButtonWithIcon.vue';
   import TaskDetailsModal from '@/components/modal/TaskDetailsModal.vue';
 
@@ -129,17 +124,15 @@
   const selectedTaskId = ref<number | null>(null);
   const selectedForDeleteTaskIds = ref<number[]>([]);
   const sortOrder = ref<TaskSortOrder>(TaskSortOrder.DEFAULT);
-  const tasks = ref<TaskDto[]>([
-    {
-      id: 10,
-      title: 'Task title lorem ipsum task title dolor',
-      dueDate: '01.01.2019',
-      priority: TaskPriority.HIGH
-    }]);
+  const tasks = ref<TaskDto[]>([]);
 
-  // onBeforeMount(() => {
-  //   loadTasks();
-  // });
+  onBeforeMount(() => {
+    loadTasks();
+  });
+
+  watch(sortOrder, () => {
+    loadTasks();
+  });
 
   function openSaveTaskModal(taskId: number | null) {
     selectedTaskId.value = taskId;
@@ -171,7 +164,7 @@
 
   async function deleteSelection() {
     await taskController.deleteTasks(selectedForDeleteTaskIds.value);
-    tasks.value = tasks.value.filter((t) => !selectedForDeleteTaskIds.value.includes(t.id));
+    tasks.value = tasks.value.filter((t) => !selectedForDeleteTaskIds.value.includes(t.id!));
     selectedForDeleteTaskIds.value = [];
   }
 </script>
