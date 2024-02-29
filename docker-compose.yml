@@ -3,30 +3,96 @@ version: '3.9'
 services:
   auth-db:
     image: mysql:latest
-    restart: always
+    restart: unless-stopped
     ports:
       - "3306:3306"
     volumes:
       - auth_data:/var/lib/mysql
     environment:
       MYSQL_ROOT_PASSWORD: root
-    networks:
-      - mysql_network
 
   task-db:
     image: mysql:latest
     restart: always
     ports:
-      - "3307:3306"
+      - "3307:3307"
     volumes:
       - task_data:/var/lib/mysql
     environment:
       MYSQL_ROOT_PASSWORD: root
-    networks:
-      - mysql_network
+      MYSQL_TCP_PORT: 3307
 
-networks:
-  mysql_network:
+  zookeeper:
+    image: confluentinc/cp-zookeeper:latest
+    container_name: zookeeper
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    ports:
+      - "2181:2181"
+
+  kafka:
+    image: confluentinc/cp-kafka:latest
+    ports:
+      - "19092:19092"
+    depends_on:
+      - zookeeper
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:2181'
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:19092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    healthcheck:
+      test: kafka-topics --bootstrap-server kafka:9092 --list
+      interval: 1s
+      timeout: 10s
+      retries: 10
+
+  auth-service:
+    build:
+      dockerfile: auth.Dockerfile
+    depends_on:
+      kafka:
+        condition: service_healthy
+      auth-db:
+        condition: service_started
+    environment:
+      KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+      SPRING_DATASOURCE_URL: jdbc:mysql://auth-db:3306/auth?characterEncoding=utf-8&useSSL=false&allowPublicKeyRetrieval=true&createDatabaseIfNotExist=true
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+    expose:
+      - "8081"
+
+  task-service:
+    build:
+      dockerfile: task.Dockerfile
+    depends_on:
+      - auth-service
+      - task-db
+    environment:
+      KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+      SPRING_DATASOURCE_URL: jdbc:mysql://task-db:3307/task?characterEncoding=utf-8&useSSL=false&allowPublicKeyRetrieval=true&createDatabaseIfNotExist=true
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+    expose:
+      - "8080"
+
+  gateway:
+    build:
+      dockerfile: gateway.Dockerfile
+    depends_on:
+      - auth-service
+      - task-service
+    environment:
+      URL_TASKSERVICE: http://task-service:8080
+      URL_AUTHSERVICE: http://auth-service:8081
+    ports:
+      - "9000:9000"
 
 volumes:
   auth_data:

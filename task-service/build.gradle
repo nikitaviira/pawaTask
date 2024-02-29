@@ -11,3 +11,6 @@ dependencies {
     runtimeOnly 'com.mysql:mysql-connector-j'
 }
 
+jar {
+    enabled = false
+}

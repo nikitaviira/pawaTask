@@ -1,0 +1,11 @@
+gateway
+task-service
+frontend
+.gitattributes
+.gitignore
+README.md
+task.Dockerfile
+gateway.Dockerfile
+.git
+docker-compose.yml
+.idea

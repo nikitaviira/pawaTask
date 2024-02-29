@@ -1,0 +1,11 @@
+auth-service
+gateway
+auth.Dockerfile
+gateway.Dockerfile
+frontend
+.gitattributes
+.gitignore
+README.md
+.git
+docker-compose.yml
+.idea

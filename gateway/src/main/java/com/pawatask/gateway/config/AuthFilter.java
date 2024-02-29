@@ -2,11 +2,9 @@ package com.pawatask.gateway.config;
 
 import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pawatask.gateway.exception.UnauthorizedException;
 import com.pawatask.gateway.util.JWTUtil;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.stereotype.Component;
@@ -20,17 +18,8 @@ import static java.util.Objects.requireNonNull;
 @RequiredArgsConstructor
 public class AuthFilter implements GatewayFilter {
     private final JWTUtil jwtUtil;
-
-    @Value("${authentication.enabled}")
-    private boolean authEnabled;
-    private final ObjectMapper objectMapper;
-
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
-        if (!authEnabled) {
-            return chain.filter(exchange);
-        }
-
         String authorizationHeader = exchange.getRequest().getHeaders().getFirst("Authorization");
         if (isNull(authorizationHeader)) {
             throw new UnauthorizedException("Missing credentials");
