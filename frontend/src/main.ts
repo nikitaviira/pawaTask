@@ -14,10 +14,10 @@ app.use(createPinia());
 app.use(router);
 app.use(Vue3Toastify, {
   position: 'top-center',
-  autoClose: 2000,
+  autoClose: 1500,
   transition: 'bounce',
   closeButton: false,
-  limit: 2
+  limit: 1
 } as ToastContainerOptions);
 
 app.mount('#app');

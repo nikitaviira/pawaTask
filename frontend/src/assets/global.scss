@@ -22,3 +22,10 @@ p {
 input, button, textarea, select {
   all: unset;
 }
+
+:root {
+  --toastify-toast-width: 500px !important;
+  --toastify-color-light: #e74c3c !important;
+  --toastify-text-color-light: white !important;
+  --toastify-color-error: white !important;
+}
