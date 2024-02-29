@@ -11,7 +11,13 @@
     </div>
     <hr>
     <div v-if="tasks.length === 0">
-      <span>You do not have any tasks.</span> <span class="add-task-link">Add a new task</span>
+      <span>You do not have any tasks.</span>
+      <span
+        class="add-task-link"
+        @click="openSaveTaskModal(null)"
+      >
+        Add a new task
+      </span>
     </div>
     <div
       v-else
