@@ -10,91 +10,94 @@
       />
     </div>
     <hr>
-    <div v-if="tasks.length === 0">
-      <span>You do not have any tasks.</span>
-      <span
-        class="add-task-link"
-        @click="openSaveTaskModal(null)"
-      >
-        Add a new task
-      </span>
-    </div>
-    <div
-      v-else
-      class="tasks-wrapper"
-    >
-      <div class="tasks-action-bar">
-        <ButtonWithIcon
-          v-if="selectedForDeleteTaskIds.length > 0"
-          icon-color="white"
-          icon="trashcan"
-          btn-color="red"
-          @click="deleteSelection"
-        />
-        <select v-model="sortOrder">
-          <option
-            selected
-            :value="TaskSortOrder.DEFAULT"
-          >
-            Sort by
-          </option>
-          <option :value="TaskSortOrder.PRIORITY_ASC">
-            Priority (from lowest)
-          </option>
-          <option :value="TaskSortOrder.PRIORITY_DESC">
-            Priority (from highest)
-          </option>
-          <option :value="TaskSortOrder.DUE_DATE_ASC">
-            Due date (from closest)
-          </option>
-          <option :value="TaskSortOrder.DUE_DATE_DESC">
-            Due date (from furthest)
-          </option>
-        </select>
+    <div v-if="!loading">
+      <div v-if="tasks.length === 0">
+        <span>You do not have any tasks.</span>
+        <span
+          class="add-task-link"
+          @click="openSaveTaskModal(null)"
+        >
+          Add a new task
+        </span>
       </div>
       <div
-        ref="taskContainerRef"
-        class="tasks-scroll-wrapper"
+        v-else
+        class="tasks-wrapper"
       >
-        <div
-          v-for="task in tasks"
-          :key="task.id!"
-          class="task-container"
-        >
-          <input
-            v-model="selectedForDeleteTaskIds"
-            class="checkbox"
-            type="checkbox"
-            :value="task.id"
-          >
-          <div class="title">
-            {{ task.title }}
-          </div>
-          <div class="priority">
-            {{ priorityConversion[task.priority!] }}
-          </div>
-          <div class="date">
-            <img
-              src="@/assets/icons/calendar.svg"
-              alt="calendar-icon"
+        <div class="tasks-action-bar">
+          <ButtonWithIcon
+            v-if="selectedForDeleteTaskIds.length > 0"
+            icon-color="white"
+            icon="trashcan"
+            btn-color="red"
+            @click="deleteSelection"
+          />
+          <select v-model="sortOrder">
+            <option
+              selected
+              :value="TaskSortOrder.DEFAULT"
             >
-            {{ task.dueDate }}
-          </div>
-          <div class="actions">
-            <ButtonWithIcon
-              icon-color="white"
-              icon="message"
-              @click="openTaskDetailsModal(task.id!)"
-            />
-            <ButtonWithIcon
-              icon-color="white"
-              icon="edit"
-              @click="openSaveTaskModal(task.id)"
-            />
+              Sort by
+            </option>
+            <option :value="TaskSortOrder.PRIORITY_ASC">
+              Priority (from lowest)
+            </option>
+            <option :value="TaskSortOrder.PRIORITY_DESC">
+              Priority (from highest)
+            </option>
+            <option :value="TaskSortOrder.DUE_DATE_ASC">
+              Due date (from closest)
+            </option>
+            <option :value="TaskSortOrder.DUE_DATE_DESC">
+              Due date (from furthest)
+            </option>
+          </select>
+        </div>
+        <div
+          ref="taskContainerRef"
+          class="tasks-scroll-wrapper"
+        >
+          <div
+            v-for="task in tasks"
+            :key="task.id!"
+            class="task-container"
+          >
+            <input
+              v-model="selectedForDeleteTaskIds"
+              class="checkbox"
+              type="checkbox"
+              :value="task.id"
+            >
+            <div class="title">
+              {{ task.title }}
+            </div>
+            <div class="priority">
+              {{ priorityConversion[task.priority!] }}
+            </div>
+            <div class="date">
+              <img
+                src="@/assets/icons/calendar.svg"
+                alt="calendar-icon"
+              >
+              {{ task.dueDate }}
+            </div>
+            <div class="actions">
+              <ButtonWithIcon
+                icon-color="white"
+                icon="message"
+                @click="openTaskDetailsModal(task.id!)"
+              />
+              <ButtonWithIcon
+                icon-color="white"
+                icon="edit"
+                @click="openSaveTaskModal(task.id)"
+              />
+            </div>
           </div>
         </div>
       </div>
     </div>
+    <Loader v-else />
     <CreateTaskModal
       :show="showSaveTaskModal"
       :task-id="selectedTaskId"
@@ -117,7 +120,9 @@
   import taskController, { priorityConversion, type TaskDto, TaskSortOrder } from '@/api/controllers/taskController';
   import ButtonWithIcon from '@/components/buttons/ButtonWithIcon.vue';
   import TaskDetailsModal from '@/components/modal/TaskDetailsModal.vue';
+  import Loader from '@/components/Loader.vue';
 
+  const loading = ref(true);
   const taskContainerRef = ref<HTMLElement | null>(null);
   const showSaveTaskModal = ref(false);
   const showTaskDetailsModal = ref(false);
@@ -155,11 +160,10 @@
   }
 
   async function loadTasks() {
+    loading.value = true;
     const { data } = await taskController.tasks(sortOrder.value);
     tasks.value = data;
-    if (taskContainerRef.value) {
-      taskContainerRef.value.scrollTop = 0;
-    }
+    loading.value = false;
   }
 
   async function deleteSelection() {
@@ -319,8 +323,8 @@
         @media screen and (max-width: 650px) {
           grid-row-gap: 5px;
           grid-template-areas:
-        "title title title title title title checkbox"
-        "date . priority . . . actions";
+            "title title title title title title checkbox"
+            "date . priority . . . actions";
 
           input[type='checkbox'] {
             place-self: end;

@@ -19,5 +19,6 @@
     cursor: pointer;
     font-weight: bold;
     text-align: center;
+    border-radius: 10px;
   }
 </style>

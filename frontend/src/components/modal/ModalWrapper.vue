@@ -16,14 +16,20 @@
             <p class="title">
               {{ title }}
             </p>
-            <CloseIcon
-              class="close-btn"
-              @click="closeModal"
-            />
+            <div>
+              <CloseIcon
+                class="close-btn"
+                @click="closeModal"
+              />
+            </div>
           </div>
-          <div class="modal-content-wrapper">
+          <div
+            v-if="!loading"
+            class="modal-content-wrapper"
+          >
             <slot />
           </div>
+          <Loader v-else />
         </div>
       </div>
     </Transition>
@@ -34,11 +40,16 @@
   import { onClickOutside, onKeyStroke, useMediaQuery } from '@vueuse/core';
   import { ref, watch } from 'vue';
   import CloseIcon from '@/components/icons/close-icon.vue';
+  import Loader from '@/components/Loader.vue';
 
-  const props = defineProps<{
+  const props = withDefaults(defineProps<{
     show: boolean,
-    title: string
-  }>();
+    title: string,
+    loading?: boolean
+  }>(), {
+    loading: false
+  });
+
   const emit = defineEmits<{ (e: 'closed'): void }>();
   const isMobile = useMediaQuery('(max-width: 550px)');
   const modalRef = ref<HTMLElement | null>(null);

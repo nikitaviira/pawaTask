@@ -32,7 +32,7 @@ export interface TaskDto {
 }
 
 export interface SaveCommentDto {
-  taskId: number;
+  taskId?: number;
   comment: string;
 }
 

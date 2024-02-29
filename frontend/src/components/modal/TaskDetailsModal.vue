@@ -2,12 +2,14 @@
   <ModalWrapper
     :show="show"
     :title="taskDetails.title"
+    :loading="loading"
     @closed="closeModal"
   >
     <div class="description">
       {{ taskDetails.description }}
     </div>
     <div class="details">
+      <p><span>Created on:</span>{{ taskDetails.createdAt }}</p>
       <p><span>Due date:</span>{{ taskDetails.dueDate }}</p>
       <p><span>Priority:</span>{{ priorityConversion[taskDetails.priority] }}</p>
       <p><span>Created by:</span>{{ taskDetails.createdBy }}</p>
@@ -26,7 +28,7 @@
           :key="i"
           class="comment"
         >
-          <span>{{ comment.createdBy }}</span><span>{{ comment.createdAt }}</span>
+          <span class="username">{{ comment.createdBy }}</span><span class="date">on {{ comment.createdAt }}</span>
           <p>{{ comment.comment }}</p>
         </div>
       </div>
@@ -52,7 +54,7 @@
 
 <script setup lang="ts">
   import ModalWrapper from '@/components/modal/ModalWrapper.vue';
-  import { required } from '@vuelidate/validators';
+  import { maxLength, required } from '@vuelidate/validators';
   import { ref, watch } from 'vue';
   import taskController, {
     priorityConversion,
@@ -73,25 +75,30 @@
     taskId: number | null
   }>();
 
-  watch(() => props.taskId, (taskId) => {
-    if (props.show && taskId) {
-      // loadTask(taskId);
-    }
-  });
-
+  const loading = ref(true);
   const taskDetails = ref<TaskDetailsDto>({
     id: -1,
-    title: 'Some title',
-    description: 'Ssadasdas dasjdnasjkdnas daskdnaskjdasj ddaskhdashdui asiduhasiudhasi udhasiudhasiuhdiuashd asiudhiasuhdiuashd asdasdasd asdasda sd asdasdas.',
-    createdBy: 'b@mail.ru',
-    lastEditedBy: 'a@mail.ru',
-    dueDate: '22.02.1998',
+    title: '',
+    description: '',
+    createdBy: '',
+    createdAt: '',
+    lastEditedBy: '',
+    dueDate: '',
     priority: TaskPriority.LOW,
     comments: []
   });
 
+  watch(() => props.taskId, (taskId) => {
+    if (props.show && taskId) {
+      loadTask(taskId);
+    }
+  });
+
   const rules = {
-    comment: { required }
+    comment: {
+      required,
+      maxLength: maxLength(150)
+    }
   };
 
   const commentForm = ref<SaveCommentDto>({
@@ -101,8 +108,10 @@
   const $v = useVuelidate(rules, commentForm);
 
   async function loadTask(taskId: number) {
+    loading.value = true;
     const { data } = await taskController.taskDetails(taskId);
     taskDetails.value = data;
+    loading.value = false;
   }
 
   async function submitForm() {
@@ -110,14 +119,19 @@
       if (result && props.taskId) {
         await taskController.saveComment({ ...commentForm.value, taskId: props.taskId });
         await loadTask(props.taskId);
+        resetForm();
       }
     });
   }
 
   function closeModal() {
+    resetForm();
+    emit('closed');
+  }
+
+  function resetForm() {
     commentForm.value.comment = '';
     $v.value.$reset();
-    emit('closed');
   }
 </script>
 
@@ -146,10 +160,21 @@
       flex-direction: column;
       gap: 15px;
 
+      .comment {
+        .username {
+          font-weight: bold;
+        }
+        .date {
+          margin-left: 5px;
+          font-style: italic;
+          color: grey;
+        }
+      }
+
       @media screen and (min-width: 550px) {
         max-height: 400px;
         overflow-y: scroll;
-        scrollbar-width: none;
+        scrollbar-width: thin;
       }
     }
   }
@@ -173,10 +198,15 @@
         gap: 15px;
 
         ::v-deep(.input-wrapper) {
-          width: 70%;
+          width: 100%;
           input {
             background: white;
           }
+        }
+
+        ::v-deep(.submit-btn) {
+          min-width: 85px;
+          font-size: 12px;
         }
       }
     }
