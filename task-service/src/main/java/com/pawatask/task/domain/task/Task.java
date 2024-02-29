@@ -39,6 +39,7 @@ public class Task {
   private UserDetails lastEditedBy;
 
   @OneToMany(cascade = ALL, orphanRemoval = true, mappedBy = "task")
+  @OrderBy(value = "createdAt DESC")
   private List<TaskComment> comments = new ArrayList<>();
 
   public void addComment(TaskComment taskComment) {
