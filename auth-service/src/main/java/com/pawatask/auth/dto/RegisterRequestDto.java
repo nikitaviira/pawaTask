@@ -15,6 +15,6 @@ public record RegisterRequestDto(
     String email,
     @NotBlank(message = "{field.mandatory}")
     @PasswordValidation
-    @Size(max = 40, message = "{maxLength.exceeded}")
+    @Size(max = 30, message = "{maxLength.exceeded}")
     String password
 ) {}
