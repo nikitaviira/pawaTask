@@ -1,25 +1,25 @@
 import apiClient from '../client';
 import type { AxiosResponse } from 'axios';
 
-export interface Credentials {
+export interface LoginRequestDto {
   email: string;
   password: string;
 }
 
-export interface RegistrationCredentials extends Credentials {
-  repeatedPassword: string;
+export interface RegisterRequestDto extends LoginRequestDto {
+  userName: string;
 }
 
-export interface AuthResponse {
+export interface CredentialsDto {
   jwtToken: string;
 }
 
 export default {
-  login(credentials: Credentials): Promise<AxiosResponse<AuthResponse>> {
+  login(credentials: LoginRequestDto): Promise<AxiosResponse<CredentialsDto>> {
     return apiClient().post('/auth/login', credentials);
   },
 
-  register(credentials: Credentials): Promise<AxiosResponse<AuthResponse>> {
+  register(credentials: LoginRequestDto): Promise<AxiosResponse<CredentialsDto>> {
     return apiClient().post('/auth/register', credentials);
   }
 };

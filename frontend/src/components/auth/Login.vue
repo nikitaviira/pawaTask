@@ -21,7 +21,7 @@
 <script setup lang="ts">
   import { required } from '@vuelidate/validators';
   import { ref } from 'vue';
-  import type { Credentials } from '@/api/controllers/authController';
+  import type { LoginRequestDto } from '@/api/controllers/authController';
   import useVuelidate from '@vuelidate/core';
   import { useUserStore } from '@/stores/userStore';
   import { useRouter } from 'vue-router';
@@ -31,17 +31,17 @@
   const router = useRouter();
   const userStore = useUserStore();
 
-  const rules = {
+  const validationRules = {
     email: { required },
     password: { required }
   };
 
-  const loginForm = ref<Credentials>({
+  const loginForm = ref<LoginRequestDto>({
     email: '',
     password: ''
   });
 
-  const $v = useVuelidate(rules, loginForm);
+  const $v = useVuelidate(validationRules, loginForm);
 
   async function submitForm() {
     await $v.value.$validate().then(async(result) => {
