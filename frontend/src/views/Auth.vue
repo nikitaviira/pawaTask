@@ -88,7 +88,6 @@
     min-width: 500px;
     border-radius: 20px;
     box-shadow: $shadow;
-    min-height: 590px;
     display: flex;
     flex-direction: column;
     @media screen and (max-width: 600px) {
