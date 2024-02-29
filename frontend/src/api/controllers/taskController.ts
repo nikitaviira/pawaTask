@@ -23,66 +23,59 @@ export enum TaskSortOrder {
   DUE_DATE_DESC = 'DUE_DATE_DESC'
 }
 
-export interface SaveTaskDto {
+export interface TaskDto {
   id: number | null;
   title: string;
   description: string;
-  dueDate: string;
   priority: TaskPriority | null;
-  comments: string;
-}
-
-export interface TaskDto {
-  id: number;
-  title: string;
   dueDate: string;
-  priority: TaskPriority;
 }
 
 export interface SaveCommentDto {
-  taskId?: number;
+  taskId: number;
   comment: string;
 }
 
-export interface TaskCommentDto {
+export interface CommentDto {
+  comment: string;
   createdBy: string;
   createdAt: string;
-  comment: string;
 }
 
 export interface TaskDetailsDto {
   id: number;
   title: string;
   description: string;
+  createdAt: string;
   createdBy: string;
   lastEditedBy: string;
   dueDate: string;
   priority: TaskPriority;
-  comments: TaskCommentDto[];
+  comments: CommentDto[];
 }
 
 export default {
   tasks(sortOrder: TaskSortOrder): Promise<AxiosResponse<TaskDto[]>> {
-    return apiClient().get('/tasks', { params: { sortOrder } });
+    return apiClient().get('/task/all', { params: { sortOrder } });
   },
 
-  task(taskId: number): Promise<AxiosResponse<SaveTaskDto>> {
+  task(taskId: number): Promise<AxiosResponse<TaskDto>> {
     return apiClient().get(`/task/${taskId}`);
   },
 
   taskDetails(taskId: number): Promise<AxiosResponse<TaskDetailsDto>> {
-    return apiClient().get(`/task/details/${taskId}`);
+    return apiClient().get(`/task/${taskId}/details`);
   },
 
-  saveTask(task: SaveTaskDto): Promise<AxiosResponse<void>> {
+  saveTask(task: TaskDto): Promise<AxiosResponse<void>> {
     return apiClient().post('/task/save', task);
   },
 
   saveComment(comment: SaveCommentDto): Promise<AxiosResponse<void>> {
-    return apiClient().post('/task/save-comment', comment);
+    return apiClient().post('/task/comments/save', comment);
   },
 
   deleteTasks(taskIds: number[]): Promise<AxiosResponse<void>> {
-    return apiClient().post('/tasks/delete', taskIds);
+    return apiClient().post('/task/delete', taskIds);
   },
 };
