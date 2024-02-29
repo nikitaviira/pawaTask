@@ -41,4 +41,8 @@
         <modifyDataType tableName="users" columnName="email" newDataType="VARCHAR(200)" />
         <modifyDataType tableName="users" columnName="user_name" newDataType="VARCHAR(30)" />
     </changeSet>
+
+    <changeSet id="1709221687291" author="Nikita Viira">
+        <addDefaultValue tableName="users" columnName="created_at" defaultValueComputed="CURRENT_TIMESTAMP" />
+    </changeSet>
 </databaseChangeLog>
