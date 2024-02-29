@@ -37,14 +37,6 @@
       :select-options="priorityOptions"
     />
 
-    <InputWrapper
-      v-model.trim="taskForm.comments"
-      :validator="$v.comments"
-      label="Comments"
-      placeholder="Enter some comments (optional)..."
-      type="textarea"
-    />
-
     <SubmitButton
       style="float: right"
       text="Add a new task"
@@ -58,7 +50,7 @@
   import ModalWrapper from '@/components/modal/ModalWrapper.vue';
   import { required } from '@vuelidate/validators';
   import { ref, watch } from 'vue';
-  import taskController, { type SaveTaskDto, TaskPriority } from '@/api/controllers/taskController';
+  import taskController, { type TaskDto, TaskPriority } from '@/api/controllers/taskController';
   import useVuelidate from '@vuelidate/core';
   import SubmitButton from '@/components/buttons/SubmitButton.vue';
 
@@ -78,21 +70,19 @@
     }
   });
 
-  const rules = {
+  const validationRules = {
     title: { required },
     description: { required },
     dueDate: { required },
-    priority: { required },
-    comments: { }
+    priority: { required }
   };
 
-  const taskForm = ref<SaveTaskDto>({
+  const taskForm = ref<TaskDto>({
     id: null,
     title: '',
     description: '',
     dueDate: '',
-    priority: null,
-    comments: ''
+    priority: null
   });
 
   const priorityOptions: Record<string, TaskPriority> = {
@@ -102,7 +92,7 @@
     Critical: TaskPriority.CRITICAL
   };
 
-  const $v = useVuelidate(rules, taskForm);
+  const $v = useVuelidate(validationRules, taskForm);
 
   async function submitForm() {
     await $v.value.$validate().then(async(result) => {
@@ -125,8 +115,7 @@
       title: '',
       description: '',
       dueDate: '',
-      priority: null,
-      comments: ''
+      priority: null
     };
 
     $v.value.$reset();
