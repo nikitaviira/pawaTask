@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia';
 import type { CredentialsDto, LoginRequestDto, RegisterRequestDto } from '@/api/controllers/authController';
 import authController from '@/api/controllers/authController';
+import router from '@/router';
 
 export const useUserStore = defineStore('user', {
   state: () => ({
@@ -26,8 +27,9 @@ export const useUserStore = defineStore('user', {
         this.removeUserInfo();
       }
     },
-    logout() {
+    async logout() {
       this.removeUserInfo();
+      await router.push('/auth');
     },
     setUserInfo(payload: CredentialsDto) {
       localStorage.setItem('jwtToken', payload.jwtToken);

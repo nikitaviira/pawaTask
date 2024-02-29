@@ -1,6 +1,5 @@
 import type { AxiosInstance } from 'axios';
 import Axios from 'axios';
-import router from '@/router';
 import { useUserStore } from '@/stores/userStore';
 import { toast } from 'vue3-toastify';
 
@@ -24,8 +23,7 @@ export default (): AxiosInstance => {
       const { status, data }: { status: number, data: ErrorDto } = error.response;
       switch (status) {
         case 401:
-          store.logout();
-          await router.push('/auth');
+          await store.logout();
           break;
         case 400:
           toast.error(data.message);

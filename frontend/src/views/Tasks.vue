@@ -4,10 +4,20 @@
       <p class="brand">
         pawaTask
       </p>
-      <SubmitButton
-        text="Add a new task"
-        @click="openSaveTaskModal(null)"
-      />
+      <div style="display: flex; gap: 10px">
+        <SubmitButton
+          text="Add a new task"
+          @click="openSaveTaskModal(null)"
+        />
+        <ButtonWithIcon
+          :width="40"
+          rounded
+          btn-color="red"
+          icon-color="white"
+          icon="logout"
+          @click="store.logout()"
+        />
+      </div>
     </div>
     <hr>
     <div v-if="!loading">
@@ -27,6 +37,8 @@
         <div class="tasks-action-bar">
           <ButtonWithIcon
             v-if="selectedForDeleteTaskIds.length > 0"
+            :width="30"
+            :height="30"
             icon-color="white"
             icon="trashcan"
             btn-color="red"
@@ -83,11 +95,15 @@
             </div>
             <div class="actions">
               <ButtonWithIcon
+                :width="30"
+                :height="30"
                 icon-color="white"
                 icon="message"
                 @click="openTaskDetailsModal(task.id!)"
               />
               <ButtonWithIcon
+                :width="30"
+                :height="30"
                 icon-color="white"
                 icon="edit"
                 @click="openSaveTaskModal(task.id)"
@@ -121,7 +137,9 @@
   import ButtonWithIcon from '@/components/buttons/ButtonWithIcon.vue';
   import TaskDetailsModal from '@/components/modal/TaskDetailsModal.vue';
   import Loader from '@/components/Loader.vue';
+  import { useUserStore } from '@/stores/userStore';
 
+  const store = useUserStore();
   const loading = ref(true);
   const taskContainerRef = ref<HTMLElement | null>(null);
   const showSaveTaskModal = ref(false);

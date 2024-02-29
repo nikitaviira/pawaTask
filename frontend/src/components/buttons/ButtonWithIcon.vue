@@ -1,6 +1,11 @@
 <template>
   <button
-    :style="{background: btnColor ? btnColor : 'revert-layer'}"
+    :style="{
+      background: btnColor ? btnColor : 'revert-layer',
+      height: height ? `${height}px` : 'auto',
+      width: width ? `${width}px` : '30px',
+      borderRadius: rounded ? '10px' : 0
+    }"
     class="icon-btn"
   >
     <Component
@@ -16,7 +21,10 @@
   const props = defineProps<{
     icon: string,
     iconColor: string,
-    btnColor?: string
+    btnColor?: string,
+    rounded?: boolean,
+    height?: number,
+    width?: number
   }>();
   const iconComponent: any = defineAsyncComponent(() => import(`../icons/${props.icon}-icon.vue`));
 </script>
@@ -25,8 +33,6 @@
   @import "@/assets/variables";
 
   .icon-btn {
-    height: 30px;
-    width: 30px;
     background: $main-color;
     display: flex;
     align-items: center;
