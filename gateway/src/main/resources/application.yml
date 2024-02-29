@@ -1,0 +1,22 @@
+server:
+  port: 9000
+
+url:
+  taskService: http://localhost:8080
+  authService: http://localhost:8081
+
+token:
+  secret: 1c67bfccc89898166ea40aff407b45a5a9d53700a2cb6dab93343f4c5909375c
+
+spring:
+  cloud:
+    gateway:
+      default-filters:
+        - DedupeResponseHeader=Access-Control-Allow-Origin Access-Control-Allow-Credentials, RETAIN_UNIQUE
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowed-origins: "http://localhost:5173"
+            allowed-methods: "*"
+            allowed-headers: "*"
+            allow-credentials: true
