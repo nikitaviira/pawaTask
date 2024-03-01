@@ -12,7 +12,12 @@
           ref="modalRef"
           class="modal-content"
         >
-          <div class="modal-header">
+          <div
+            class="modal-header"
+            @touchstart="onTouchStart"
+            @touchmove="onTouchMove"
+            @touchend="onTouchEnd"
+          >
             <p class="title">
               {{ title }}
             </p>
@@ -54,6 +59,9 @@
   const isMobile = useMediaQuery('(max-width: 550px)');
   const modalRef = ref<HTMLElement | null>(null);
 
+  const touchStartY = ref(0);
+  let modalY = 0;
+
   watch(() => props.show, (show) => {
     if (show) {
       document.documentElement.style.overflow = 'hidden';
@@ -82,6 +90,34 @@
     emit('closed');
     if (isMobile.value) {
       modalRef.value?.classList.add('slide-out');
+    }
+  }
+
+  function onTouchStart(event: TouchEvent) {
+    if (isMobile.value) {
+      touchStartY.value = event.touches[0].clientY;
+    }
+  }
+
+  function onTouchMove(event: TouchEvent) {
+    if (isMobile.value) {
+      const touchY = event.touches[0].clientY;
+      const deltaY = touchY - touchStartY.value;
+
+      modalY = Math.min(0, -deltaY);
+      modalRef.value!.style.translate = `0 ${-modalY}px`;
+    }
+  }
+
+  function onTouchEnd() {
+    if (isMobile.value) {
+      if (modalY < -150) {
+        closeModal();
+      } else {
+        modalY = 0;
+        touchStartY.value = 0;
+        modalRef.value!.style.translate = '';
+      }
     }
   }
 </script>
