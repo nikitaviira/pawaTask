@@ -15,37 +15,39 @@
       <p><span>Created by:</span>{{ taskDetails.createdBy }}</p>
       <p><span>Last edited by:</span>{{ taskDetails.lastEditedBy }}</p>
     </div>
-    <div class="comments">
-      <p v-if="taskDetails.comments.length === 0">
-        There are no comments yet
-      </p>
-      <div
-        v-else
-        class="comments-wrapper"
-      >
+    <div class="comment-section">
+      <div class="comments">
+        <p v-if="taskDetails.comments.length === 0">
+          There are no comments yet
+        </p>
         <div
-          v-for="(comment, i) in taskDetails.comments"
-          :key="i"
-          class="comment"
+          v-else
+          class="comments-wrapper"
         >
-          <span class="username">{{ comment.createdBy }}</span><span class="date">on {{ comment.createdAt }}</span>
-          <p>{{ comment.comment }}</p>
+          <div
+            v-for="(comment, i) in taskDetails.comments"
+            :key="i"
+            class="comment"
+          >
+            <span class="username">{{ comment.createdBy }}</span><span class="date">on {{ comment.createdAt }}</span>
+            <p>{{ comment.comment }}</p>
+          </div>
         </div>
       </div>
-    </div>
-    <div class="comment-form-container">
-      <div class="comment-form-wrapper">
-        <div class="comment-form">
-          <InputWrapper
-            v-model.trim="commentForm.comment"
-            :validator="$v.comment"
-            placeholder="Write a comment..."
-            type="input"
-          />
-          <SubmitButton
-            text="Add comment"
-            @click="submitForm"
-          />
+      <div class="comment-form-container">
+        <div class="comment-form-wrapper">
+          <div class="comment-form">
+            <InputWrapper
+              v-model.trim="commentForm.comment"
+              :validator="$v.comment"
+              placeholder="Write a comment..."
+              type="input"
+            />
+            <SubmitButton
+              text="Add comment"
+              @click="submitForm"
+            />
+          </div>
         </div>
       </div>
     </div>
@@ -151,62 +153,81 @@
     }
   }
 
-  .comments {
-    margin-top: 20px;
-    margin-bottom: 20px;
+  .comment-section {
+    display: flex;
+    flex-direction: column;
 
-    .comments-wrapper {
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
+    @media screen and (max-width: 550px) {
+      flex-direction: column-reverse;
 
-      .comment {
-        .username {
-          font-weight: bold;
-        }
-        .date {
-          margin-left: 5px;
-          font-style: italic;
-          color: grey;
-        }
+      .comment-form-container {
+        margin-top: 20px;
+        margin-bottom: 20px !important;
       }
 
-      @media screen and (min-width: 550px) {
-        max-height: 400px;
-        overflow-y: scroll;
-        scrollbar-width: thin;
+      .comments {
+        margin-top: 0 !important;
+        margin-bottom: 0 !important;
       }
     }
-  }
 
-  .comment-form-container {
-    height: 80px;
-    background: #e3e3e3;
-    margin-left: -20px;
-    margin-right: -20px;
-    margin-bottom: -20px;
+    .comments {
+      margin-top: 20px;
+      margin-bottom: 20px;
 
-    .comment-form-wrapper {
-      width: 100%;
-      height: 100%;
-      padding: 15px;
-
-      .comment-form {
+      .comments-wrapper {
         display: flex;
-        height: 40px;
-        justify-content: space-between;
+        flex-direction: column;
         gap: 15px;
 
-        ::v-deep(.input-wrapper) {
-          width: 100%;
-          input {
-            background: white;
+        .comment {
+          .username {
+            font-weight: bold;
+          }
+          .date {
+            margin-left: 5px;
+            font-style: italic;
+            color: grey;
           }
         }
 
-        ::v-deep(.submit-btn) {
-          min-width: 85px;
-          font-size: 12px;
+        @media screen and (min-width: 550px) {
+          max-height: 400px;
+          overflow-y: scroll;
+          scrollbar-width: thin;
+        }
+      }
+    }
+
+    .comment-form-container {
+      height: 80px;
+      background: #e3e3e3;
+      margin-left: -20px;
+      margin-right: -20px;
+      margin-bottom: -20px;
+
+      .comment-form-wrapper {
+        width: 100%;
+        height: 100%;
+        padding: 15px;
+
+        .comment-form {
+          display: flex;
+          height: 40px;
+          justify-content: space-between;
+          gap: 15px;
+
+          ::v-deep(.input-wrapper) {
+            width: 100%;
+            input {
+              background: white;
+            }
+          }
+
+          ::v-deep(.submit-btn) {
+            min-width: 85px;
+            font-size: 12px;
+          }
         }
       }
     }
