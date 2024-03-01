@@ -4,6 +4,7 @@ import com.pawatask.task.domain.task.*;
 import com.pawatask.task.domain.userDetails.UserDetails;
 import com.pawatask.task.domain.userDetails.UserDetailsRepository;
 import com.pawatask.task.dto.SaveCommentDto;
+import com.pawatask.task.dto.TaskDisplayDto;
 import com.pawatask.task.dto.TaskDto;
 import com.pawatask.task.util.IntTestBase;
 import org.junit.jupiter.api.Test;
@@ -36,16 +37,11 @@ class TaskServiceTest extends IntTestBase {
   @Test
   public void saveTask_success() throws Exception {
     saveUserDetails(1L, "a@b.ra", "user_name");
-    String taskJson = "{" +
-        "    \"id\": null," +
-        "    \"title\": \"Water the plants\"," +
-        "    \"description\": \"Some description\"," +
-        "    \"priority\": \"MEDIUM\"," +
-        "    \"dueDate\": \"2022-02-25\"" +
-        "}";
 
+    String body = convertObjectToJsonString(new TaskDto(null, "Water the plants", "Some description",
+        MEDIUM, LocalDate.of(2022, 2, 25)));
     mockMvc.perform(post("/api/task/save")
-            .content(taskJson)
+            .content(body)
             .header("userId", 1L)
             .contentType(APPLICATION_JSON))
         .andExpect(status().isOk());
@@ -67,16 +63,10 @@ class TaskServiceTest extends IntTestBase {
     UserDetails updateUser = saveUserDetails(2L, "a@bc.ra", "other_user_name");
     saveTask("Water the plants", LocalDate.of(2022, 2, 25), CRITICAL, initialUser);
 
-    String updatedTaskJson = "{" +
-        "    \"id\": 1," +
-        "    \"title\": \"Water the plants twice\"," +
-        "    \"description\": \"Some other description\"," +
-        "    \"priority\": \"LOW\"," +
-        "    \"dueDate\": \"2023-02-25\"" +
-        "}";
-
+    String body = convertObjectToJsonString(new TaskDto(1L, "Water the plants twice", "Some other description",
+        LOW, LocalDate.of(2023, 2, 25)));
     mockMvc.perform(post("/api/task/save")
-            .content(updatedTaskJson)
+            .content(body)
             .header("userId", 2L)
             .contentType(APPLICATION_JSON))
         .andExpect(status().isOk());
@@ -151,10 +141,10 @@ class TaskServiceTest extends IntTestBase {
     saveTask("Go touch grass", LocalDate.of(2024, 2, 25), HIGH, user);
     saveTask("Play games", LocalDate.of(2022, 2, 26), LOW, user);
 
-    TaskDto t1 = new TaskDto(1L, "Water the plants", "Some description", CRITICAL, LocalDate.of(2022, 2, 25));
-    TaskDto t2 = new TaskDto(2L, "Throw the garbage out", "Some description", MEDIUM, LocalDate.of(2022, 3, 25));
-    TaskDto t3 = new TaskDto(3L, "Go touch grass", "Some description", HIGH, LocalDate.of(2024, 2, 25));
-    TaskDto t4 = new TaskDto(4L, "Play games", "Some description", LOW, LocalDate.of(2022, 2, 26));
+    TaskDisplayDto t1 = new TaskDisplayDto(1L, "Water the plants", CRITICAL, LocalDate.of(2022, 2, 25));
+    TaskDisplayDto t2 = new TaskDisplayDto(2L, "Throw the garbage out", MEDIUM, LocalDate.of(2022, 3, 25));
+    TaskDisplayDto t3 = new TaskDisplayDto(3L, "Go touch grass", HIGH, LocalDate.of(2024, 2, 25));
+    TaskDisplayDto t4 = new TaskDisplayDto(4L, "Play games", LOW, LocalDate.of(2022, 2, 26));
 
     mockMvc.perform(get("/api/task/all"))
         .andExpect(status().isOk())
@@ -198,7 +188,7 @@ class TaskServiceTest extends IntTestBase {
         .andExpect(jsonPath("$.title").value("Water the plants"))
         .andExpect(jsonPath("$.description").value("Some description"))
         .andExpect(jsonPath("$.priority").value("CRITICAL"))
-        .andExpect(jsonPath("$.dueDate").value("25.02.2022"));
+        .andExpect(jsonPath("$.dueDate").value("2022-02-25"));
   }
 
   @Test

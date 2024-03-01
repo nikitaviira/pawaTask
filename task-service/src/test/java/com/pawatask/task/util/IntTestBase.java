@@ -22,6 +22,9 @@ public abstract class IntTestBase {
     @Autowired
     EraseDbHelper eraseDbHelper;
 
+    @Autowired
+    ObjectMapper objectMapper;
+
     @Container
     public static MySQLContainer<SingletonMySqlContainer> mysqlContainer = getInstance();
 
@@ -31,7 +34,7 @@ public abstract class IntTestBase {
     }
 
     protected String convertObjectToJsonString(Object object) throws JsonProcessingException {
-        ObjectWriter writer = new ObjectMapper().writer().withDefaultPrettyPrinter();
+        ObjectWriter writer = objectMapper.writer().withDefaultPrettyPrinter();
         return writer.writeValueAsString(object);
     }
 }

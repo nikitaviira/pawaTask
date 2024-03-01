@@ -22,9 +22,9 @@ public class TaskService {
   private final TaskRepository taskRepository;
   private final UserDetailsRepository userDetailsRepository;
 
-  public List<TaskDto> allTasks(SortOrder sortOrder) {
+  public List<TaskDisplayDto> allTasks(SortOrder sortOrder) {
     return taskRepository.findAllBy(by(sortOrder.getDirection(), sortOrder.getDbField())).stream()
-        .map(this::toTaskDto)
+        .map(this::toTaskDisplayDto)
         .toList();
   }
 
@@ -77,6 +77,15 @@ public class TaskService {
     return taskRepository.findById(id)
         .map(mapper)
         .orElseThrow(() -> taskNotFound(id));
+  }
+
+  private TaskDisplayDto toTaskDisplayDto(Task task) {
+    return new TaskDisplayDto(
+        task.getId(),
+        task.getTitle(),
+        task.getPriority(),
+        task.getDueDate()
+    );
   }
 
   private TaskDto toTaskDto(Task task) {

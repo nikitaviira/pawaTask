@@ -1,9 +1,6 @@
 package com.pawatask.task.dto;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.pawatask.task.domain.task.TaskPriority;
-import com.pawatask.task.util.LocalDateSerializer;
 import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -22,7 +19,5 @@ public record TaskDto(
     @NotNull(message = "{field.mandatory}")
     TaskPriority priority,
     @NotNull(message = "{field.mandatory}")
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    @JsonSerialize(using = LocalDateSerializer.class)
     LocalDate dueDate
 ) {}

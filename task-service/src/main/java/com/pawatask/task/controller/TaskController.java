@@ -14,7 +14,7 @@ public class TaskController extends BaseController {
   private final TaskService taskService;
 
   @GetMapping("all")
-  public List<TaskDto> allTasks(@RequestParam(required = false, defaultValue = "DEFAULT") SortOrder sortOrder) {
+  public List<TaskDisplayDto> allTasks(@RequestParam(required = false, defaultValue = "DEFAULT") SortOrder sortOrder) {
     return taskService.allTasks(sortOrder);
   }
 

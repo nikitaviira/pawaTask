@@ -31,6 +31,13 @@ export interface TaskDto {
   dueDate: string;
 }
 
+export interface TaskDisplayDto {
+  id: number;
+  title: string;
+  priority: TaskPriority;
+  dueDate: string;
+}
+
 export interface SaveCommentDto {
   taskId?: number;
   comment: string;
@@ -55,7 +62,7 @@ export interface TaskDetailsDto {
 }
 
 export default {
-  tasks(sortOrder: TaskSortOrder): Promise<AxiosResponse<TaskDto[]>> {
+  tasks(sortOrder: TaskSortOrder): Promise<AxiosResponse<TaskDisplayDto[]>> {
     return apiClient().get('/task/all', { params: { sortOrder } });
   },
 
