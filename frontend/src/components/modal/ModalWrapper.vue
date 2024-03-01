@@ -59,6 +59,7 @@
   const isMobile = useMediaQuery('(max-width: 550px)');
   const modalRef = ref<HTMLElement | null>(null);
 
+  const scrollDownThreshold = -150;
   const touchStartY = ref(0);
   let modalY = 0;
 
@@ -111,7 +112,7 @@
 
   function onTouchEnd() {
     if (isMobile.value) {
-      if (modalY < -150) {
+      if (modalY < scrollDownThreshold) {
         closeModal();
       } else {
         modalY = 0;
