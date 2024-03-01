@@ -2,6 +2,7 @@
   <ModalWrapper
     :show="show"
     :title="taskId ? 'Edit task' : 'Add task'"
+    :loading="loading"
     @closed="closeModal"
   >
     <InputWrapper
@@ -77,6 +78,7 @@
     priority: { required }
   };
 
+  const loading = ref(false);
   const taskForm = ref<TaskDto>({
     id: null,
     title: '',
@@ -105,8 +107,10 @@
   }
 
   async function loadTask(taskId: number) {
+    loading.value = true;
     const { data } = await taskController.task(taskId);
     taskForm.value = data;
+    loading.value = false;
   }
 
   function closeModal() {
