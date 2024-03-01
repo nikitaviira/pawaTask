@@ -1,7 +1,7 @@
 <template>
   <ModalWrapper
     :show="show"
-    title="New task"
+    :title="taskId ? 'Edit task' : 'Add task'"
     @closed="closeModal"
   >
     <InputWrapper
@@ -39,7 +39,7 @@
 
     <SubmitButton
       style="float: right"
-      text="Add a new task"
+      :text="taskId ? 'Submit changes' : 'Add a new task'"
       @click="submitForm"
     />
   </ModalWrapper>
