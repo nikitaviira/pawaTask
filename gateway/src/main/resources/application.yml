@@ -8,6 +8,10 @@ url:
 token:
   secret: 1c67bfccc89898166ea40aff407b45a5a9d53700a2cb6dab93343f4c5909375c
 
+redis:
+  host: localhost
+  port: 6379
+
 spring:
   cloud:
     gateway:
