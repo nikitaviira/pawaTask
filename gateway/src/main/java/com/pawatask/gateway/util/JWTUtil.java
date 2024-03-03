@@ -5,8 +5,6 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import java.util.Date;
-
 import static com.auth0.jwt.JWT.require;
 import static com.auth0.jwt.algorithms.Algorithm.HMAC512;
 
@@ -18,12 +16,7 @@ public class JWTUtil {
     this.algorithm = HMAC512(secret);
   }
 
-  public DecodedJWT decodeJwt(String token) {
+  public DecodedJWT decodeAndVerifyJwt(String token) {
     return require(algorithm).build().verify(token);
-  }
-
-  public boolean isTokenExpired(DecodedJWT decodedJWT) {
-    Date expirationDate = decodedJWT.getExpiresAt();
-    return expirationDate != null && expirationDate.before(new Date());
   }
 }

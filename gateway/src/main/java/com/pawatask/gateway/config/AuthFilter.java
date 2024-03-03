@@ -1,5 +1,6 @@
 package com.pawatask.gateway.config;
 
+import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.pawatask.gateway.exception.UnauthorizedException;
@@ -27,13 +28,11 @@ public class AuthFilter implements GatewayFilter {
 
         DecodedJWT decodedJWT;
         try {
-            decodedJWT = jwtUtil.decodeJwt(requireNonNull(authorizationHeader).split(" ")[1]);
+            decodedJWT = jwtUtil.decodeAndVerifyJwt(requireNonNull(authorizationHeader).split(" ")[1]);
+        } catch (TokenExpiredException e) {
+            throw new UnauthorizedException(e.getMessage());
         } catch (Exception e) {
             throw new UnauthorizedException("Incorrect authentication token");
-        }
-
-        if (jwtUtil.isTokenExpired(decodedJWT)) {
-            throw new UnauthorizedException("Authentication token has expired");
         }
 
         addUserContext(exchange, decodedJWT);
