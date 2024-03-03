@@ -1,29 +1,14 @@
 package com.pawatask.gateway;
 
 import com.pawatask.gateway.dto.ErrorDto;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.context.ApplicationContext;
 import org.springframework.test.web.reactive.server.EntityExchangeResult;
-import org.springframework.test.web.reactive.server.WebTestClient;
-import util.RedisTestBase;
-import util.SetRemoteAddressWebFilter;
+import util.IntTestBase;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class RateLimitFilterTest extends RedisTestBase {
-	private final String ipAddress = "127.0.0.1";
+class RateLimitFilterTest extends IntTestBase {
 	private final String endpoint = "/api/task/all";
-
-	private WebTestClient client;
-
-	@BeforeEach
-	void setUp(ApplicationContext context) {
-		client = WebTestClient.bindToApplicationContext(context)
-				.webFilter(new SetRemoteAddressWebFilter(ipAddress))
-				.configureClient()
-				.build();
-	}
 
 	@Test
 	void requestPerSecondExceeded() {
