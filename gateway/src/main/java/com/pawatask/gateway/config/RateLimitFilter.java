@@ -48,7 +48,7 @@ public class RateLimitFilter implements GlobalFilter, Ordered {
     String perMinuteKey = "rpm:%s".formatted(ipAddress);
 
     return redisTemplate.opsForValue().get(perMinuteKey)
-        .switchIfEmpty(defer(() -> redisTemplate.opsForValue().set(perMinuteKey, 1L, ofMinutes(1L)).thenReturn(0L)))
+        .switchIfEmpty(defer(() -> redisTemplate.opsForValue().set(perMinuteKey, 0L, ofMinutes(1L)).thenReturn(0L)))
         .flatMap(value -> {
           if (value >= maxRequestsPerMinute) {
             return redisTemplate.opsForValue().set(blockedKey, -1L, ofMinutes(blockMinutesOnExceedingRPM))
@@ -61,7 +61,7 @@ public class RateLimitFilter implements GlobalFilter, Ordered {
   private Mono<Object> perSecondRateLimit(String ipAddress) {
     String perSecondKey = "rps:%s".formatted(ipAddress);
     return redisTemplate.opsForValue().get(perSecondKey)
-        .switchIfEmpty(defer(() -> redisTemplate.opsForValue().set(perSecondKey, 1L, ofSeconds(1L)).thenReturn(0L)))
+        .switchIfEmpty(defer(() -> redisTemplate.opsForValue().set(perSecondKey, 0L, ofSeconds(1L)).thenReturn(0L)))
         .flatMap(value -> {
           if (value >= maxRequestsPerSecond) {
             return error(rateLimitExceeded());
