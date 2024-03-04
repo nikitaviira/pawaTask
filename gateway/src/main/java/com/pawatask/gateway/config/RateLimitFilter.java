@@ -35,7 +35,7 @@ public class RateLimitFilter implements GlobalFilter, Ordered {
     String blockedKey = "blocked:%s".formatted(ipAddress);
     return redisTemplate.opsForValue().get(blockedKey).hasElement()
         .flatMap(isBlocked -> isBlocked
-                ? Mono.error(rateLimitExceeded())
+                ? Mono.error(rateLimitExceeded(ipAddress))
                 : Mono.zip(
                     perMinuteRateLimit(ipAddress, blockedKey),
                     perSecondRateLimit(ipAddress)
@@ -52,7 +52,7 @@ public class RateLimitFilter implements GlobalFilter, Ordered {
         .flatMap(value -> {
           if (value >= maxRequestsPerMinute) {
             return redisTemplate.opsForValue().set(blockedKey, -1L, ofMinutes(blockMinutesOnExceedingRPM))
-                .flatMap(ignore -> error(rateLimitExceeded()));
+                .flatMap(ignore -> error(rateLimitExceeded(ipAddress)));
           }
           return redisTemplate.opsForValue().increment(perMinuteKey);
         });
@@ -64,7 +64,7 @@ public class RateLimitFilter implements GlobalFilter, Ordered {
         .switchIfEmpty(defer(() -> redisTemplate.opsForValue().set(perSecondKey, 0L, ofSeconds(1L)).thenReturn(0L)))
         .flatMap(value -> {
           if (value >= maxRequestsPerSecond) {
-            return error(rateLimitExceeded());
+            return error(rateLimitExceeded(ipAddress));
           }
           return redisTemplate.opsForValue().increment(perSecondKey);
         });
@@ -77,7 +77,8 @@ public class RateLimitFilter implements GlobalFilter, Ordered {
         .orElseThrow();
   }
 
-  private RateLimitExceeded rateLimitExceeded() {
+  private RateLimitExceeded rateLimitExceeded(String ipAddress) {
+    log.error("RATE LIMIT EXCEEDED: %s".formatted(ipAddress));
     return new RateLimitExceeded("Rate limit exceeded");
   }
 
