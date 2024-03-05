@@ -20,7 +20,7 @@ import static org.springframework.kafka.support.serializer.JsonDeserializer.TRUS
 
 @Configuration
 public class KafkaConsumerConfig {
-    @Value("${kafka.bootstrap-servers}")
+    @Value("${kafka.bootstrap.servers}")
     private String kafkaBootstrapServers;
 
     @Value("${kafka.consumer.group-id}")
