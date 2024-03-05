@@ -1,0 +1,27 @@
+<configuration>
+    <include resource="org/springframework/boot/logging/logback/base.xml"/>
+
+    <appender name="general" class="ch.qos.logback.core.FileAppender">
+        <file>../logs/gateway/general.log</file>
+        <append>true</append>
+        <encoder>
+            <pattern>%d{yyyy.MM.dd HH:mm:ss,SSS Z} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="requests" class="ch.qos.logback.core.FileAppender">
+        <file>../logs/gateway/requests.log</file>
+        <append>true</append>
+        <encoder>
+            <pattern>%d{yyyy.MM.dd HH:mm:ss,SSS Z} %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <logger name="com.pawatask.gateway.config.LoggingFilter" level="info" additivity="false">
+        <appender-ref ref="requests"/>
+    </logger>
+
+    <root level="info">
+        <appender-ref ref="general"/>
+    </root>
+</configuration>

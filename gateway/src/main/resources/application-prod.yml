@@ -1,0 +1,16 @@
+logging:
+  config: classpath:log/logback-prod.xml
+
+token:
+  secret: ${TOKEN_SECRET}
+
+spring:
+  cloud:
+    gateway:
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowed-origins: "https://real-client-url"
+            allowed-methods: "*"
+            allowed-headers: "*"
+            allow-credentials: true
