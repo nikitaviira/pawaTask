@@ -1,0 +1,27 @@
+<configuration>
+    <include resource="org/springframework/boot/logging/logback/base.xml"/>
+
+    <appender name="general" class="ch.qos.logback.core.FileAppender">
+        <file>../logs/task/general.log</file>
+        <append>true</append>
+        <encoder>
+            <pattern>%d{yyyy.MM.dd HH:mm:ss,SSS Z} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="kafka" class="ch.qos.logback.core.FileAppender">
+        <file>../logs/task/kafka.log</file>
+        <append>true</append>
+        <encoder>
+            <pattern>%d{yyyy.MM.dd HH:mm:ss,SSS Z} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <logger name="com.pawatask.task.kafka" level="info" additivity="false">
+        <appender-ref ref="kafka"/>
+    </logger>
+
+    <root level="info">
+        <appender-ref ref="general"/>
+    </root>
+</configuration>
