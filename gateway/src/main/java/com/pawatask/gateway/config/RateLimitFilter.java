@@ -11,12 +11,10 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
-import java.net.InetAddress;
-import java.net.InetSocketAddress;
-
+import static com.pawatask.gateway.config.FilterOrder.RATE_LIMIT_FILTER;
+import static com.pawatask.gateway.util.WebUtil.getIpAddress;
 import static java.time.Duration.ofMinutes;
 import static java.time.Duration.ofSeconds;
-import static java.util.Optional.ofNullable;
 import static reactor.core.publisher.Mono.defer;
 import static reactor.core.publisher.Mono.error;
 
@@ -70,13 +68,6 @@ public class RateLimitFilter implements GlobalFilter, Ordered {
         });
   }
 
-  private String getIpAddress(ServerWebExchange exchange) {
-    return ofNullable(exchange.getRequest().getRemoteAddress())
-        .map(InetSocketAddress::getAddress)
-        .map(InetAddress::getHostAddress)
-        .orElseThrow();
-  }
-
   private RateLimitExceeded rateLimitExceeded(String ipAddress) {
     log.error("RATE LIMIT EXCEEDED: %s".formatted(ipAddress));
     return new RateLimitExceeded("Rate limit exceeded");
@@ -84,6 +75,6 @@ public class RateLimitFilter implements GlobalFilter, Ordered {
 
   @Override
   public int getOrder() {
-    return HIGHEST_PRECEDENCE;
+    return RATE_LIMIT_FILTER.getOrder();
   }
 }

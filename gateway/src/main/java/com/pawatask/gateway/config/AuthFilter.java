@@ -8,16 +8,18 @@ import com.pawatask.gateway.util.JWTUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
+import org.springframework.core.Ordered;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
+import static com.pawatask.gateway.config.FilterOrder.AUTH_FILTER;
 import static java.util.Objects.isNull;
 import static java.util.Objects.requireNonNull;
 
 @Component
 @RequiredArgsConstructor
-public class AuthFilter implements GatewayFilter {
+public class AuthFilter implements GatewayFilter, Ordered {
     private final JWTUtil jwtUtil;
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
@@ -45,5 +47,10 @@ public class AuthFilter implements GatewayFilter {
                 .mutate()
                 .header("userId", userId.toString())
                 .build();
+    }
+
+    @Override
+    public int getOrder() {
+        return AUTH_FILTER.getOrder();
     }
 }
