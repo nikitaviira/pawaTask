@@ -14,7 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static org.apache.kafka.clients.consumer.ConsumerConfig.*;
-import static org.springframework.kafka.listener.ContainerProperties.AckMode.MANUAL_IMMEDIATE;
+import static org.springframework.kafka.listener.ContainerProperties.AckMode.RECORD;
 import static org.springframework.kafka.support.serializer.ErrorHandlingDeserializer.VALUE_DESERIALIZER_CLASS;
 import static org.springframework.kafka.support.serializer.JsonDeserializer.TRUSTED_PACKAGES;
 
@@ -31,7 +31,7 @@ public class KafkaConsumerConfig {
         Map<String, Object> props = new HashMap<>();
         props.put(BOOTSTRAP_SERVERS_CONFIG, kafkaBootstrapServers);
         props.put(GROUP_ID_CONFIG, kafkaConsumerGroupId);
-        props.put(AUTO_OFFSET_RESET_CONFIG, "latest");
+        props.put(AUTO_OFFSET_RESET_CONFIG, "earliest");
         props.put(KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         props.put(VALUE_DESERIALIZER_CLASS_CONFIG, ErrorHandlingDeserializer.class);
         props.put(VALUE_DESERIALIZER_CLASS, JsonDeserializer.class);
@@ -44,10 +44,9 @@ public class KafkaConsumerConfig {
     public ConcurrentKafkaListenerContainerFactory<String, Object> kafkaListenerContainerFactory() {
         ConcurrentKafkaListenerContainerFactory<String, Object> factory = new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(consumerFactory());
-
-        factory.getContainerProperties().setAckMode(MANUAL_IMMEDIATE);
+        factory.setConcurrency(3);
+        factory.getContainerProperties().setAckMode(RECORD);
         factory.getContainerProperties().setSyncCommits(true);
-        
         return factory;
     }
 }
