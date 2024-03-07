@@ -3,13 +3,19 @@ package com.pawatask.gateway;
 import com.pawatask.gateway.dto.ErrorDto;
 import org.junit.jupiter.api.Test;
 import org.springframework.cloud.contract.wiremock.AutoConfigureWireMock;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.reactive.server.EntityExchangeResult;
 import util.IntTestBase;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
-@AutoConfigureWireMock
+@AutoConfigureWireMock(port = 0)
+@TestPropertySource(properties = {
+    "url.task-service=http://localhost:${wiremock.server.port}",
+    "url.auth-service=http://localhost:${wiremock.server.port}",
+    "url.email-service=http://localhost:${wiremock.server.port}"
+})
 public class AuthFilterTest extends IntTestBase {
   @Test
   void missingAuthHeader() {
