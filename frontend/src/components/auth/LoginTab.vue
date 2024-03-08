@@ -35,7 +35,6 @@
   import { useRouter } from 'vue-router';
   import AuthForm from '@/components/auth/FormLayout.vue';
   import InputWrapper from '@/components/generic/InputWrapper.vue';
-  import type { ErrorDto } from '@/api/client';
   import Link from '@/components/generic/Link.vue';
 
   const emit = defineEmits<{ (e: 'open-tab', tab: number): void }>();
@@ -65,8 +64,7 @@
       await userStore.login(loginForm.value);
       await toHomePage();
     } catch (error: any) {
-      const { data }: { data: ErrorDto } = error.response;
-      errorText.value = data?.message;
+      errorText.value = error.response?.message;
     }
   }
 

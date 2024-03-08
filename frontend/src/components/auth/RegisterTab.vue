@@ -101,8 +101,7 @@
       });
       await toHomePage();
     } catch (error: any) {
-      const { data }: { data: ErrorDto } = error.response;
-      errorText.value = data?.message;
+      errorText.value = error.response?.message;
     }
   }
 

@@ -22,7 +22,6 @@
   import { ref } from 'vue';
   import useVuelidate from '@vuelidate/core';
   import { required } from '@vuelidate/validators';
-  import type { ErrorDto } from '@/api/client';
   import passwordResetController, { type PasswordResetDto } from '@/api/controllers/passwordResetController';
 
   const emit = defineEmits<{ (e: 'open-tab', tab: number): void }>();
@@ -47,8 +46,7 @@
       successText.value = 'Instructions have been sent to your email';
       setTimeout(() => emit('open-tab', 0), 2000);
     } catch (error: any) {
-      const { data }: { data: ErrorDto } = error.response;
-      errorText.value = data?.message;
+      errorText.value = error.response?.message;
       disableSubmitBtn.value = false;
     }
   }

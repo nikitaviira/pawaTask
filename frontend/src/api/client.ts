@@ -23,12 +23,11 @@ export default (): AxiosInstance => {
   instance.interceptors.response.use((response) => response, async(error) => {
     if (error.response && error.response.status === 401) {
       alertStore.addAlert('Please login to proceed');
-      await userStore.logout();
-    } else if (error.response && error.response.status === 500) {
+      return await userStore.logout();
+    } else if (!error.response || error.response.status === 500) {
       toast.error('Something went wrong!');
-    } else {
-      throw error;
     }
+    throw error;
   });
 
   instance.interceptors.request.use(function(config) {

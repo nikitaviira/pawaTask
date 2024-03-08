@@ -83,8 +83,7 @@
       successText.value = 'New password has been saved';
       setTimeout(() => router.push({ name: 'auth' }), 2000);
     } catch (error: any) {
-      const { data }: { data: ErrorDto } = error.response;
-      errorText.value = data?.message;
+      errorText.value = error.response?.message;
       disableSubmitBtn.value = false;
     }
   }
