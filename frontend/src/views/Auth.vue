@@ -36,13 +36,13 @@
 </template>
 
 <script setup lang="ts">
-  import LoginForm from '@/components/auth/LoginForm.vue';
-  import RegisterForm from '@/components/auth/RegisterForm.vue';
-  import ForgotPasswordForm from '@/components/auth/ForgotPasswordForm.vue';
+  import LoginTab from '@/components/auth/LoginTab.vue';
+  import RegisterTab from '@/components/auth/RegisterTab.vue';
+  import ForgotPasswordTab from '@/components/auth/ForgotPasswordTab.vue';
   import { ref } from 'vue';
   import Link from '@/components/generic/Link.vue';
 
-  const tabs = [LoginForm, RegisterForm, ForgotPasswordForm];
+  const tabs = [LoginTab, RegisterTab, ForgotPasswordTab];
   const currentTab = ref(0);
 </script>
 
