@@ -18,7 +18,7 @@
 
 <script setup lang="ts">
   import FormLayout from '@/components/auth/FormLayout.vue';
-  import InputWrapper from '@/components/auth/InputWrapper.vue';
+  import InputWrapper from '@/components/generic/InputWrapper.vue';
   import { ref } from 'vue';
   import useVuelidate from '@vuelidate/core';
   import { required } from '@vuelidate/validators';
