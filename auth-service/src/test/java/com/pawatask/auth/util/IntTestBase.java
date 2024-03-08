@@ -27,6 +27,7 @@ public abstract class IntTestBase {
     @AfterEach
     void afterEach() {
         eraseDbHelper.eraseDb();
+        DateUtil.resetMockNow();
     }
 
     protected String convertObjectToJsonString(Object object) throws JsonProcessingException {
