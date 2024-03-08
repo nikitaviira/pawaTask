@@ -4,41 +4,46 @@
       <p class="brand">
         pawaTask
       </p>
-      <div class="tabs-switch">
+      <div
+        v-if="currentTab !== 2"
+        class="tabs-switch"
+      >
         <button
-          :class="{'active': currentTab === Login}"
-          @click="currentTab = Login"
+          :class="{'active': currentTab === 0}"
+          @click="currentTab = 0"
         >
           Login
         </button>
         <button
-          :class="{'active': currentTab === Register}"
-          @click="currentTab = Register"
+          :class="{'active': currentTab === 1}"
+          @click="currentTab = 1"
         >
           Register
         </button>
       </div>
-      <transition
-        name="fade"
-        mode="out-in"
-      >
-        <KeepAlive>
-          <Component
-            :is="currentTab"
-            :key="currentTab"
-          />
-        </KeepAlive>
-      </transition>
+      <Link
+        v-else
+        text="Back to login"
+        @clicked="currentTab = 0"
+      />
+      <Component
+        :is="tabs[currentTab]"
+        :key="currentTab"
+        @openTab="(tab: number) => currentTab = tab"
+      />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-  import Login from '@/components/auth/Login.vue';
-  import Register from '@/components/auth/Register.vue';
-  import { shallowRef } from 'vue';
+  import LoginForm from '@/components/auth/LoginForm.vue';
+  import RegisterForm from '@/components/auth/RegisterForm.vue';
+  import ForgotPasswordForm from '@/components/auth/ForgotPasswordForm.vue';
+  import { ref } from 'vue';
+  import Link from '@/components/generic/Link.vue';
 
-  const currentTab = shallowRef(Login);
+  const tabs = [LoginForm, RegisterForm, ForgotPasswordForm];
+  const currentTab = ref(0);
 </script>
 
 <style lang="scss" scoped>
@@ -95,13 +100,5 @@
       height: 100%;
       padding: 30px;
     }
-  }
-
-  .fade-enter-active, .fade-leave-active {
-    transition: opacity .3s ease;
-  }
-
-  .fade-enter, .fade-leave-to {
-    opacity: 0;
   }
 </style>
