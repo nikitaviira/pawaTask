@@ -17,7 +17,7 @@ app.use(Vue3Toastify, {
   autoClose: 1500,
   transition: 'bounce',
   closeButton: false,
-  limit: 1
+  limit: 2
 } as ToastContainerOptions);
 
 app.mount('#app');
