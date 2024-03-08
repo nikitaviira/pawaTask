@@ -57,7 +57,6 @@ services:
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
       KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:19092
-      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
     healthcheck:
       test: kafka-topics --bootstrap-server kafka:9092 --list
       interval: 1s
@@ -77,6 +76,20 @@ services:
       interval: 5s
       timeout: 5s
       retries: 10
+
+  email-service:
+    build:
+      dockerfile: email.Dockerfile
+    depends_on:
+      kafka:
+        condition: service_healthy
+    environment:
+      KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+      EMAIL_ENABLESENDING: true
+      SENDGRID_APIKEY: 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
+      SENDGRID_VERIFICATIONKEY: MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+sdLjrwvUWnRx8b8WBC9KhgxobHtS6fL+xSu4v3BOBMqW8UWJKYaeOFi38THYB5YVBtiTT+7rjXjUcOSVe4lpg==
+    expose:
+      - "8082"
 
   auth-service:
     build:
@@ -120,9 +133,12 @@ services:
         condition: service_started
       task-service:
         condition: service_started
+      email-service:
+        condition: service_started
     environment:
       URL_TASKSERVICE: http://task-service:8080
       URL_AUTHSERVICE: http://auth-service:8081
+      URL_EMAILSERVICE: http://email-service:8082
     ports:
       - "9000:9000"
 
