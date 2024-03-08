@@ -12,4 +12,5 @@ import org.springframework.stereotype.Component;
 public class ServiceUrls {
     private String authService;
     private String taskService;
+    private String emailService;
 }
