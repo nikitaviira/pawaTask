@@ -65,7 +65,7 @@
     TaskPriority
   } from '@/api/controllers/taskController';
   import useVuelidate from '@vuelidate/core';
-  import InputWrapper from '@/components/auth/InputWrapper.vue';
+  import InputWrapper from '@/components/generic/InputWrapper.vue';
   import SubmitButton from '@/components/buttons/SubmitButton.vue';
 
   const emit = defineEmits<{
