@@ -1,5 +1,6 @@
 rootProject.name = 'pawatask'
 include ':auth-service'
 include ':task-service'
+include ':email-service'
 include ':gateway'
 include ':kafka'

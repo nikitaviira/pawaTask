@@ -19,5 +19,8 @@ Gradle multi-project setup with 3 services:
   > Responsible for login and register of users. Creates JWT token which is passed to frontend for further authentication 
 - Task service
   > Responsible for creation and editing of tasks as well as their retrieval and creation of task comments
+- Email service
+  > Responsible for sending out emails using Sendgrid API. Email messages are formatted using Sendgrid templates. 
+    **(Emails are redirected to spam because domain is not verified by Sendgrid)**
 - API Gateway
   > Aggregates all requests to backend and applies authentication verification before proxying the request to the needed microservice
