@@ -47,7 +47,7 @@
 </template>
 
 <script setup lang="ts">
-  import InputWrapper from '@/components/auth/InputWrapper.vue';
+  import InputWrapper from '@/components/generic/InputWrapper.vue';
   import ModalWrapper from '@/components/modal/ModalWrapper.vue';
   import { required } from '@vuelidate/validators';
   import { ref, watch } from 'vue';
