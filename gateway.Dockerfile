@@ -1,6 +1,8 @@
 FROM amazoncorretto:21 AS build
 WORKDIR /app
-COPY ./ /app
+COPY gateway /app/gateway
+COPY gradle /app/gradle
+COPY build.gradle gradlew gradlew.bat gradle.properties settings.gradle /app/
 RUN ./gradlew :gateway:clean :gateway:build -x test
 
 FROM amazoncorretto:21 AS runtime

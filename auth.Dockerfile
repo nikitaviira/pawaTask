@@ -1,6 +1,9 @@
 FROM amazoncorretto:21 AS build
 WORKDIR /app
-COPY ./ /app
+COPY auth-service /app/auth-service
+COPY kafka /app/kafka
+COPY gradle /app/gradle
+COPY build.gradle gradlew gradlew.bat gradle.properties settings.gradle /app/
 RUN ./gradlew :auth-service:clean :auth-service:build -x test
 
 FROM amazoncorretto:21 AS runtime
