@@ -1,6 +1,7 @@
 <template>
   <AuthForm
     :error-text="errorText"
+    :disable-submit-btn="disableSubmitBtn"
     @submit="submitForm"
   >
     <InputWrapper
@@ -43,6 +44,7 @@
   const userStore = useUserStore();
 
   const errorText = ref('');
+  const disableSubmitBtn = ref(false);
   const loginForm = ref<LoginRequestDto>({
     email: '',
     password: ''
@@ -60,11 +62,13 @@
   }
 
   async function login() {
+    disableSubmitBtn.value = true;
     try {
       await userStore.login(loginForm.value);
       await toHomePage();
     } catch (error: any) {
       errorText.value = error.response?.message;
+      disableSubmitBtn.value = false;
     }
   }
 

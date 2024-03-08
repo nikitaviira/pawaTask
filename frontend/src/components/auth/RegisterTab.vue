@@ -1,6 +1,7 @@
 <template>
   <AuthForm
     :error-text="errorText"
+    :disable-submit-btn="disableSubmitBtn"
     @submit="submitForm"
   >
     <InputWrapper
@@ -47,7 +48,6 @@
   import AuthForm from '@/components/auth/FormLayout.vue';
   import InputWrapper from '@/components/generic/InputWrapper.vue';
   import { emailValid, passwordValid, repeatedPasswordValid } from '@/components/validation/validation';
-  import type { ErrorDto } from '@/api/client';
 
   const router = useRouter();
   const userStore = useUserStore();
@@ -57,6 +57,7 @@
   }
 
   const errorText = ref('');
+  const disableSubmitBtn = ref(false);
   const registerForm = ref<RegisterForm>({
     email: '',
     password: '',
@@ -93,6 +94,7 @@
   }
 
   async function register() {
+    disableSubmitBtn.value = true;
     try {
       await userStore.register({
         email: registerForm.value.email,
@@ -102,6 +104,7 @@
       await toHomePage();
     } catch (error: any) {
       errorText.value = error.response?.message;
+      disableSubmitBtn.value = false;
     }
   }
 
