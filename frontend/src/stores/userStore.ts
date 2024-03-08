@@ -17,6 +17,7 @@ export const useUserStore = defineStore('user', {
         this.setUserInfo(data);
       } catch (err) {
         this.removeUserInfo();
+        throw err;
       }
     },
     async login(credentials: LoginRequestDto) {
@@ -25,6 +26,7 @@ export const useUserStore = defineStore('user', {
         this.setUserInfo(data);
       } catch (err) {
         this.removeUserInfo();
+        throw err;
       }
     },
     async logout() {
