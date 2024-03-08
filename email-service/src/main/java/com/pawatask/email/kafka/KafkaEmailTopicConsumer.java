@@ -3,6 +3,7 @@ package com.pawatask.email.kafka;
 import com.pawatask.email.domain.EmailService;
 import com.pawatask.kafka.SendEmailMessage;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Profile;
 import org.springframework.kafka.annotation.KafkaHandler;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.annotation.RetryableTopic;
@@ -16,6 +17,7 @@ import static com.pawatask.kafka.KafkaTopics.Names.EMAIL;
 @Component
 @RequiredArgsConstructor
 @KafkaListener(topics = EMAIL, groupId = "${kafka.consumer.group-id}", concurrency = "3")
+@Profile("!integration")
 public class KafkaEmailTopicConsumer {
     private final EmailService emailService;
 
