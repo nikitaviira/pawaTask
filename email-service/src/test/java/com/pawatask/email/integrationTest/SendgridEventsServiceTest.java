@@ -1,11 +1,10 @@
 package com.pawatask.email.integrationTest;
 
-import com.pawatask.email.config.SendGridCredentials;
 import com.pawatask.email.domain.SendgridEventsService;
 import com.pawatask.email.domain.SendgridEventsService.SendGridEvent;
+import com.pawatask.email.domain.SendgridSignatureVerifier;
 import com.pawatask.email.util.IntTestBase;
 import com.pawatask.email.util.LoggerExtension;
-import com.sendgrid.helpers.eventwebhook.EventWebhook;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,18 +14,15 @@ import java.util.List;
 
 import static com.pawatask.kafka.EmailType.PASSWORD_RESET;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.doNothing;
 
 public class SendgridEventsServiceTest extends IntTestBase {
   @Autowired
   private SendgridEventsService sendgridEventsService;
   @MockBean
-  private SendGridCredentials sendGridCredentials;
-  @MockBean
-  private EventWebhook eventWebhook;
+  private SendgridSignatureVerifier sendgridSignatureVerifier;
   @RegisterExtension
-  public LoggerExtension loggerExtension = new LoggerExtension();
+  private final LoggerExtension loggerExtension = new LoggerExtension();
 
   @Test
   void process() throws Exception {
@@ -38,9 +34,7 @@ public class SendgridEventsServiceTest extends IntTestBase {
     String signature = "signature";
     String timestamp = "timestamp";
 
-    when(sendGridCredentials.getVerificationKey()).thenReturn("verification-key");
-    when(eventWebhook.ConvertPublicKeyToECDSA("verification-key")).thenReturn(null);
-    doReturn(true).when(eventWebhook).VerifySignature(null, body, signature, timestamp);
+    doNothing().when(sendgridSignatureVerifier).verifySignature(body, signature, timestamp);
 
     sendgridEventsService.process(body, signature, timestamp);
 
