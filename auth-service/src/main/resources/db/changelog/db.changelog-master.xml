@@ -45,4 +45,21 @@
     <changeSet id="1709221687291" author="Nikita Viira">
         <addDefaultValue tableName="users" columnName="created_at" defaultValueComputed="CURRENT_TIMESTAMP" />
     </changeSet>
+
+    <changeSet id="1709718392682" author="Nikita Viira">
+        <createTable tableName="reset_password_otps">
+            <column name="id" type="BIGINT AUTO_INCREMENT">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="otp" type="VARCHAR(32)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="email" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
 </databaseChangeLog>
