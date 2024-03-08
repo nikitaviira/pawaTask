@@ -145,7 +145,7 @@
   } from '@/api/controllers/taskController';
   import ButtonWithIcon from '@/components/buttons/ButtonWithIcon.vue';
   import TaskDetailsModal from '@/components/modal/TaskDetailsModal.vue';
-  import Loader from '@/components/Loader.vue';
+  import Loader from '@/components/generic/Loader.vue';
   import { useUserStore } from '@/stores/userStore';
 
   const store = useUserStore();

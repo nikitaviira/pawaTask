@@ -45,7 +45,7 @@
   import { onClickOutside, onKeyStroke, useMediaQuery } from '@vueuse/core';
   import { ref, watch } from 'vue';
   import CloseIcon from '@/components/icons/close-icon.vue';
-  import Loader from '@/components/Loader.vue';
+  import Loader from '@/components/generic/Loader.vue';
 
   const props = withDefaults(defineProps<{
     show: boolean,
