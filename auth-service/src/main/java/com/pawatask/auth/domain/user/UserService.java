@@ -10,6 +10,7 @@ import com.pawatask.auth.util.PasswordHashing;
 import com.pawatask.kafka.UserCreatedMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -23,6 +24,7 @@ public class UserService {
   private final PasswordHashing passwordHashing;
   private final KafkaMessageProducer kafkaMessageProducer;
 
+  @Transactional
   public CredentialsDto register(RegisterRequestDto request) {
     Optional<User> existingUser = userRepository.findByEmail(request.email());
     if (existingUser.isPresent()) {
