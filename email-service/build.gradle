@@ -10,6 +10,8 @@ dependencies {
         exclude group: 'org.mockito'
         exclude group: 'junit'
     }
+
+    testImplementation 'org.springframework.kafka:spring-kafka-test'
 }
 
 jar {

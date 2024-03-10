@@ -4,9 +4,7 @@ import com.pawatask.email.domain.SendgridEventsService;
 import com.pawatask.email.domain.SendgridEventsService.SendGridEvent;
 import com.pawatask.email.domain.SendgridSignatureVerifier;
 import com.pawatask.email.util.IntTestBase;
-import com.pawatask.email.util.LoggerExtension;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.RegisterExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
@@ -21,8 +19,6 @@ public class SendgridEventsServiceTest extends IntTestBase {
   private SendgridEventsService sendgridEventsService;
   @MockBean
   private SendgridSignatureVerifier sendgridSignatureVerifier;
-  @RegisterExtension
-  private final LoggerExtension loggerExtension = new LoggerExtension();
 
   @Test
   void process() throws Exception {

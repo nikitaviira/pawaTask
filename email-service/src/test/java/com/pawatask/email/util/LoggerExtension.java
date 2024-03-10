@@ -15,7 +15,7 @@ import static java.util.stream.Collectors.toList;
 public class LoggerExtension implements BeforeEachCallback, AfterEachCallback {
 
     private final ListAppender<ILoggingEvent> listAppender = new ListAppender<>();
-    private final Logger logger = (Logger) LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME);
+    private final Logger logger = (Logger) LoggerFactory.getLogger("com.pawatask.email");
 
     @Override
     public void afterEach(ExtensionContext extensionContext) {
