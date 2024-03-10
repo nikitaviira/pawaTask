@@ -28,6 +28,15 @@ jobs:
       - name: Test with Gradle Wrapper
         run: ./gradlew test
 
+      - name: Store reports
+        if: failure()
+        uses: actions/upload-artifact@v3
+        with:
+          name: reports
+          path: |
+            **/build/reports/
+            **/build/test-results/
+
   dependency-submission:
 
     runs-on: ubuntu-latest
@@ -44,3 +53,4 @@ jobs:
 
       - name: Generate and submit dependency graph
         uses: gradle/actions/dependency-submission@417ae3ccd767c252f5661f1ace9f835f9654f2b5
+
