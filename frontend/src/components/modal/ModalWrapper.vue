@@ -155,6 +155,7 @@
 
         .title {
           font-weight: bold;
+          word-break: break-word;
         }
       }
 

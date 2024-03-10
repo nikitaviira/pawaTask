@@ -142,6 +142,10 @@
     font-size: 14px;
   }
 
+  .description {
+    word-break: break-word;
+  }
+
   .details {
     margin-top: 20px;
     padding-bottom: 20px;

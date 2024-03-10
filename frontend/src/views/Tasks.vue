@@ -325,7 +325,8 @@
           }
 
           .title {
-            grid-area: title
+            grid-area: title;
+            word-break: break-word;
           }
 
           .priority {
