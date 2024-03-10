@@ -87,7 +87,7 @@ services:
       kafka:
         condition: service_healthy
     environment:
-      KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+      SPRING_KAFKA_BOOTSTRAPSERVERS: kafka:9092
       EMAIL_ENABLESENDING: true
       SENDGRID_APIKEY: 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
       SENDGRID_VERIFICATIONKEY: MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+sdLjrwvUWnRx8b8WBC9KhgxobHtS6fL+xSu4v3BOBMqW8UWJKYaeOFi38THYB5YVBtiTT+7rjXjUcOSVe4lpg==
@@ -103,7 +103,7 @@ services:
       auth-db:
         condition: service_healthy
     environment:
-      KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+      SPRING_KAFKA_BOOTSTRAPSERVERS: kafka:9092
       SPRING_DATASOURCE_URL: jdbc:mysql://auth-db:3306/auth?characterEncoding=utf-8&useSSL=false&allowPublicKeyRetrieval=true&createDatabaseIfNotExist=true
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: root
@@ -119,7 +119,7 @@ services:
       task-db:
         condition: service_healthy
     environment:
-      KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+      SPRING_KAFKA_BOOTSTRAPSERVERS: kafka:9092
       SPRING_DATASOURCE_URL: jdbc:mysql://task-db:3307/task?characterEncoding=utf-8&useSSL=false&allowPublicKeyRetrieval=true&createDatabaseIfNotExist=true
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: root

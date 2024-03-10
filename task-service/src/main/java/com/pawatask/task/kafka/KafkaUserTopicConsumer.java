@@ -19,7 +19,7 @@ public class KafkaUserTopicConsumer {
     private final UserDetailsRepository userDetailsRepository;
 
     @Transactional
-    @KafkaListener(topics = USER, groupId = "${kafka.consumer.group-id}", concurrency = "3")
+    @KafkaListener(topics = USER, groupId = "${spring.kafka.consumer.group-id}", concurrency = "3")
     @KafkaHandler
     public void handleUserCreatedMessage(UserCreatedMessage message) {
         log.info("Received message=[{}] for topic=[{}]", message, USER);

@@ -25,7 +25,7 @@ public class KafkaEmailTopicConsumer {
 
     @KafkaListener(
         topics = EMAIL,
-        groupId = "${kafka.consumer.group-id}",
+        groupId = "${spring.kafka.consumer.group-id}",
         concurrency = "3"
     )
     @RetryableTopic(

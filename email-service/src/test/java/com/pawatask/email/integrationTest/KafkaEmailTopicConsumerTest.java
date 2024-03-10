@@ -24,13 +24,10 @@ import static org.mockito.Mockito.*;
 import static org.springframework.kafka.test.utils.ContainerTestUtils.waitForAssignment;
 import static org.testcontainers.shaded.org.awaitility.Awaitility.await;
 
-@EmbeddedKafka(
-    topics = EMAIL,
-    partitions = 1
-)
+@EmbeddedKafka(topics = EMAIL, partitions = 1)
 @TestPropertySource(properties = {
-    "kafka.bootstrap.servers=${spring.embedded.kafka.brokers}",
-    "kafka.retry.delay=0"
+    "kafka.retry.delay=0",
+    "spring.kafka.bootstrap-servers=${spring.embedded.kafka.brokers}"
 })
 @DirtiesContext
 public class KafkaEmailTopicConsumerTest extends IntTestBase {
