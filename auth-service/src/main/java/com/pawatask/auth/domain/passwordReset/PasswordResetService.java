@@ -40,6 +40,10 @@ public class PasswordResetService {
 
   @Transactional
   public void initPasswordReset(PasswordResetDto request) {
+    if (userRepository.findByEmail(request.email()).isEmpty()) {
+      return;
+    }
+
     ResetPasswordOtp resetPasswordOtp = issueOtp(request.email());
     kafkaMessageProducer.sendMessage(EMAIL, new SendEmailMessage(
         resetPasswordOtp.getEmail(),

@@ -29,8 +29,7 @@ import static java.time.temporal.ChronoUnit.HOURS;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.core.Is.is;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -83,6 +82,7 @@ public class PasswordResetControllerTest extends IntTestBase {
   @Test
   public void initPasswordReset_success() throws Exception {
     String email = "email@email";
+    saveUser(email);
     saveResetPasswordOtp(email, "some-otp-1");
 
     when(randomUniqueToken.generateRandomToken()).thenReturn("token");
@@ -105,6 +105,21 @@ public class PasswordResetControllerTest extends IntTestBase {
         Map.of("resetPasswordUrl", "http://localhost:5173/reset-password/token"),
         List.of()
     ));
+  }
+
+  @Test
+  public void initPasswordReset_userMissing() throws Exception {
+    String email = "email@email";
+    when(randomUniqueToken.generateRandomToken()).thenReturn("token");
+
+    String body = convertObjectToJsonString(new PasswordResetDto(email));
+    mockMvc.perform(post("/api/auth/password/reset")
+            .content(body)
+            .contentType(APPLICATION_JSON))
+        .andExpect(status().isOk());
+
+    assertThat(resetPasswordRepository.count()).isZero();
+    verify(kafkaMessageProducer, never()).sendMessage(any(), any());
   }
 
   @Test
