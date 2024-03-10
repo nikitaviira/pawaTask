@@ -46,7 +46,7 @@
       successText.value = 'Instructions have been sent to your email';
       setTimeout(() => emit('open-tab', 0), 2000);
     } catch (error: any) {
-      errorText.value = error.response?.message;
+      errorText.value = error.response?.data?.message;
       disableSubmitBtn.value = false;
     }
   }

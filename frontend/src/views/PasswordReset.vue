@@ -34,7 +34,6 @@
 <script setup lang="ts">
   import { useRouter } from 'vue-router';
   import passwordResetController, { type NewPasswordDto } from '@/api/controllers/passwordResetController';
-  import type { ErrorDto } from '@/api/client';
   import { ref, toRef } from 'vue';
   import useVuelidate from '@vuelidate/core';
   import { maxLength, required } from '@vuelidate/validators';
@@ -83,7 +82,7 @@
       successText.value = 'New password has been saved';
       setTimeout(() => router.push({ name: 'auth' }), 2000);
     } catch (error: any) {
-      errorText.value = error.response?.message;
+      errorText.value = error.response?.data?.message;
       disableSubmitBtn.value = false;
     }
   }

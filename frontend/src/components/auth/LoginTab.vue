@@ -67,7 +67,7 @@
       await userStore.login(loginForm.value);
       await toHomePage();
     } catch (error: any) {
-      errorText.value = error.response?.message;
+      errorText.value = error.response?.data?.message;
       disableSubmitBtn.value = false;
     }
   }
