@@ -11,11 +11,7 @@ import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @AutoConfigureWireMock(port = 0)
-@TestPropertySource(properties = {
-    "url.task-service=http://localhost:${wiremock.server.port}",
-    "url.auth-service=http://localhost:${wiremock.server.port}",
-    "url.email-service=http://localhost:${wiremock.server.port}"
-})
+@TestPropertySource(properties = "url.task-service=http://localhost:${wiremock.server.port}")
 public class AuthFilterTest extends IntTestBase {
   @Test
   void missingAuthHeader() {
