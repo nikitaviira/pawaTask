@@ -49,7 +49,7 @@
 <script setup lang="ts">
   import InputWrapper from '@/components/generic/InputWrapper.vue';
   import ModalWrapper from '@/components/modal/ModalWrapper.vue';
-  import { required } from '@vuelidate/validators';
+  import { maxLength, required } from '@vuelidate/validators';
   import { ref, watch } from 'vue';
   import taskController, { type TaskDto, TaskPriority } from '@/api/controllers/taskController';
   import useVuelidate from '@vuelidate/core';
@@ -71,13 +71,6 @@
     }
   });
 
-  const validationRules = {
-    title: { required },
-    description: { required },
-    dueDate: { required },
-    priority: { required }
-  };
-
   const loading = ref(false);
   const taskForm = ref<TaskDto>({
     id: null,
@@ -94,7 +87,18 @@
     Critical: TaskPriority.CRITICAL
   };
 
-  const $v = useVuelidate(validationRules, taskForm);
+  const $v = useVuelidate({
+    title: {
+      required,
+      maxLength: maxLength(150)
+    },
+    description: {
+      required,
+      maxLength: maxLength(1000)
+    },
+    dueDate: { required },
+    priority: { required }
+  }, taskForm);
 
   async function submitForm() {
     await $v.value.$validate().then(async(result) => {
