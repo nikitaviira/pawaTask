@@ -4,16 +4,24 @@
 
     <input
       v-if="type === 'input' || type === 'input-password'"
-      :class="{'validation-error': validator.$error}"
+      :class="{'validation-error-outline': validator.$error}"
       :value="modelValue"
       :placeholder="placeholder"
-      :type="type === 'input-password' ? 'password' : 'text'"
+      :type="type === 'input-password' && !showPassword ? 'password' : 'text'"
       @input="updateValue"
     >
 
+    <template v-if="type === 'input-password'">
+      <Component
+        :is="showPassword ? EyeCrossedIcon : EyeIcon"
+        class="show-password"
+        @click="showPassword = !showPassword"
+      />
+    </template>
+
     <input
       v-if="type === 'date'"
-      :class="{'validation-error': validator.$error}"
+      :class="{'validation-error-outline': validator.$error}"
       :value="modelValue"
       :placeholder="placeholder"
       type="date"
@@ -24,7 +32,7 @@
 
     <textarea
       v-else-if="type === 'textarea'"
-      :class="{'validation-error': validator.$error}"
+      :class="{'validation-error-outline': validator.$error}"
       :value="modelValue"
       :placeholder="placeholder"
       @input="updateValue"
@@ -32,7 +40,7 @@
 
     <select
       v-else-if="type === 'select'"
-      :class="{'validation-error': validator.$error}"
+      :class="{'validation-error-outline': validator.$error}"
       :value="modelValue"
       @change="updateValue"
       @focus="validator.$touch()"
@@ -68,6 +76,9 @@
 
 <script setup lang="ts">
   import type { Validation } from '@vuelidate/core';
+  import { ref } from 'vue';
+  import EyeIcon from '@/components/icons/eye-icon.vue';
+  import EyeCrossedIcon from '@/components/icons/eye-crossed-icon.vue';
 
   const emit = defineEmits<{ (e: 'update:modelValue', value: string): void }>();
   const props = defineProps<{
@@ -78,6 +89,8 @@
     validator: Validation,
     selectOptions?: Record<string, any>
   }>();
+
+  const showPassword = ref(false);
 
   const updateValue = (e: Event) => {
     props.validator.$touch();
@@ -94,47 +107,38 @@
     display: flex;
     position: relative;
 
-    input {
+    input, textarea, select {
       padding: 10px 15px;
       background: $input-color;
       border-radius: 10px;
-      align-self: stretch;
 
-      &:last-child {
+      &:not(:has(~ p)) {
         margin-bottom: 23px;
       }
 
+      &:has(+ svg) {
+        padding: 10px 40px 10px 15px;
+      }
+    }
+
+    input {
+      align-self: stretch;
       &:focus {
         outline: 2px solid black;
       }
     }
 
     textarea {
-      padding: 10px 15px;
       overflow-wrap: break-word;
-      border-radius: 10px;
-      background: $input-color;
       height: 80px;
       border: 0;
-
-      &:last-child {
-        margin-bottom: 23px;
-      }
-
       &:focus {
         outline: 2px solid black;
       }
     }
 
     select {
-      background: $input-color;
-      padding: 10px 15px;
-      border-radius: 10px;
       color: grey;
-
-      &:last-child {
-        margin-bottom: 23px;
-      }
     }
 
     select option {
@@ -151,7 +155,14 @@
       color: black;
     }
 
-    .validation-error {
+    .show-password {
+      position: absolute;
+      right: 10px;
+      top: 32px;
+      cursor: pointer;
+    }
+
+    .validation-error-outline {
       outline: 2px solid $validation-error-color !important;
     }
 
