@@ -32,6 +32,7 @@ public class KafkaConsumerConfig {
         props.put(BOOTSTRAP_SERVERS_CONFIG, kafkaBootstrapServers);
         props.put(GROUP_ID_CONFIG, kafkaConsumerGroupId);
         props.put(AUTO_OFFSET_RESET_CONFIG, "earliest");
+        props.put(ISOLATION_LEVEL_CONFIG, "read_committed");
         props.put(KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         props.put(VALUE_DESERIALIZER_CLASS_CONFIG, ErrorHandlingDeserializer.class);
         props.put(VALUE_DESERIALIZER_CLASS, JsonDeserializer.class);

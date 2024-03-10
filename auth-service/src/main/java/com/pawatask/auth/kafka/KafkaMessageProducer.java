@@ -16,9 +16,9 @@ public class KafkaMessageProducer {
     public void sendMessage(KafkaTopics topic, KafkaJsonMessage message) {
         kafkaTemplate.send(topic.label, message).whenComplete((result, throwable) -> {
             if (throwable != null) {
-                log.error("Unable to send message=[" + message + "] due to : " + throwable.getMessage());
+                log.error("Unable to send message=[{}] to topic=[{}] due to : {}", message, topic, throwable.getMessage());
             } else {
-                log.info("Sent message=[" + message + "] with offset=[" + result.getRecordMetadata().offset() + "]");
+                log.info("Sent message=[{}] to topic=[{}] with offset=[{}]", message, topic, result.getRecordMetadata().offset());
             }
         });
     }

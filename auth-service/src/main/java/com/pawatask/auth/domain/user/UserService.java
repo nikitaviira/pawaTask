@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
 
 import static com.pawatask.kafka.KafkaTopics.USER;
+import static org.springframework.transaction.annotation.Propagation.REQUIRES_NEW;
 
 @Service
 @RequiredArgsConstructor
@@ -58,7 +59,8 @@ public class UserService {
     return new CredentialsDto(jwtGeneration.generate(user));
   }
 
-  private void notifyUserCreated(User user) {
+  @Transactional(value = "kafkaTransactionManager", propagation = REQUIRES_NEW)
+  public void notifyUserCreated(User user) {
     kafkaMessageProducer.sendMessage(USER,
         new UserCreatedMessage(user.getId(), user.getUserName(), user.getEmail()));
   }
