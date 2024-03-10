@@ -40,7 +40,7 @@ class AuthControllerTest extends IntTestBase {
 
   @Test
   public void register_success() throws Exception {
-    String body = convertObjectToJsonString(new RegisterRequestDto("somename", "email@mail.ru", "megamegA1"));
+    String body = convertObjectToJsonString(new RegisterRequestDto("somename1", "email@mail.ru", "megamegA1"));
     mockMvc.perform(post("/api/auth/register")
             .content(body)
             .contentType(APPLICATION_JSON))
@@ -52,10 +52,10 @@ class AuthControllerTest extends IntTestBase {
     Optional<User> user = userRepository.findById(1L);
     assertThat(user).isPresent();
     assertThat(user.get().getEmail()).isEqualTo("email@mail.ru");
-    assertThat(user.get().getUserName()).isEqualTo("somename");
+    assertThat(user.get().getUserName()).isEqualTo("somename1");
     assertTrue(passwordHashing.validatePassword("megamegA1", user.get().getHashedPassword()));
 
-    verify(kafkaMessageProducer).sendMessage(USER, new UserCreatedMessage(1L, "somename", "email@mail.ru"));
+    verify(kafkaMessageProducer).sendMessage(USER, new UserCreatedMessage(1L, "somename1", "email@mail.ru"));
   }
 
   @Test
