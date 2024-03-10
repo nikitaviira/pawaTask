@@ -138,10 +138,14 @@ services:
         condition: service_started
       email-service:
         condition: service_started
+    links:
+      - redis
     environment:
       URL_TASKSERVICE: http://task-service:8080
       URL_AUTHSERVICE: http://auth-service:8081
       URL_EMAILSERVICE: http://email-service:8082
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
     ports:
       - "9000:9000"
 
