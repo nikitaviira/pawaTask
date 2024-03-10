@@ -13,6 +13,7 @@ import reactor.core.publisher.Mono;
 
 import static com.pawatask.gateway.config.FilterOrder.LOGGING_FILTER;
 import static com.pawatask.gateway.util.WebUtil.getIpAddress;
+import static java.lang.System.currentTimeMillis;
 import static java.util.Objects.requireNonNull;
 import static reactor.core.publisher.Mono.fromRunnable;
 
@@ -22,14 +23,17 @@ import static reactor.core.publisher.Mono.fromRunnable;
 public class LoggingFilter implements GlobalFilter, Ordered {
   @Override
   public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
+    long startTime = currentTimeMillis();
     ServerHttpRequest request = exchange.getRequest();
     HttpMethod method = request.getMethod();
     String path = request.getPath().value();
+
     return chain.filter(exchange)
-        .doOnError((err) -> log.info("{} {} {} Error: {}", method, path, getIpAddress(exchange), err.getMessage()))
+        .doOnError((err) -> log.info("{} {}[{}] / Gateway error: {}", method, path, getIpAddress(exchange), err.getMessage()))
         .then(fromRunnable(() -> {
           int status = requireNonNull(exchange.getResponse().getStatusCode()).value();
-          log.info("{} {} {} {}", method, path, getIpAddress(exchange), status);
+          long duration = currentTimeMillis() - startTime;
+          log.info("{} {} {}[{}] {}ms", method, status, path, getIpAddress(exchange), duration);
         }));
   }
 
