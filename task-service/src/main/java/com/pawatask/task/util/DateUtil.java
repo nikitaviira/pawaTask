@@ -1,7 +1,7 @@
 package com.pawatask.task.util;
 
+import java.time.Instant;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -25,15 +25,15 @@ public class DateUtil {
     return date.format(DATE_FORMATTER);
   }
 
-  public static String formatDateTime(LocalDateTime dateTime) {
+  public static String formatDateTime(Instant dateTime) {
     return convertToLocalTime(dateTime).format(DATE_TIME_FORMATTER);
   }
 
-  public static String formatFullDateTime(LocalDateTime dateTime) {
+  public static String formatFullDateTime(Instant dateTime) {
     return convertToLocalTime(dateTime).format(FULL_DATE_TIME_FORMATTER);
   }
 
-  private static ZonedDateTime convertToLocalTime(LocalDateTime dateTime) {
+  private static ZonedDateTime convertToLocalTime(Instant dateTime) {
     return dateTime.atZone(UTC).withZoneSameInstant(TALLINN);
   }
 }

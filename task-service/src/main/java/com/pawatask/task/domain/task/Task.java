@@ -5,8 +5,8 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.ToString;
 
+import java.time.Instant;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,7 +25,7 @@ public class Task {
   private String title;
   private String description;
   @Column(name = "created_at", insertable = false, updatable = false)
-  private LocalDateTime createdAt;
+  private Instant createdAt;
   @Column(name = "due_date")
   private LocalDate dueDate;
   private TaskPriority priority;
