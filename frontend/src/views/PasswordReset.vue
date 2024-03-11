@@ -1,34 +1,29 @@
 <template>
-  <div class="container">
-    <div class="form-container">
-      <p class="brand">
-        pawaTask
-      </p>
-      <AuthForm
-        title="Choose new password"
-        :error-text="errorText"
-        :success-text="successText"
-        :disable-submit-btn="disableSubmitBtn"
-        @submit="submitForm"
-      >
-        <InputWrapper
-          v-model.trim="passwordResetForm.newPassword"
-          type="input-password"
-          label="Password"
-          placeholder="Enter new password"
-          :validator="$v.newPassword"
-        />
+  <AuthLayout>
+    <AuthForm
+      title="Choose new password"
+      :error-text="errorText"
+      :success-text="successText"
+      :disable-submit-btn="disableSubmitBtn"
+      @submit="submitForm"
+    >
+      <InputWrapper
+        v-model.trim="passwordResetForm.newPassword"
+        type="input-password"
+        label="Password"
+        placeholder="Enter new password"
+        :validator="$v.newPassword"
+      />
 
-        <InputWrapper
-          v-model.trim="passwordResetForm.repeatedPassword"
-          type="input-password"
-          label="Repeat password"
-          placeholder="Enter new password again"
-          :validator="$v.repeatedPassword"
-        />
-      </AuthForm>
-    </div>
-  </div>
+      <InputWrapper
+        v-model.trim="passwordResetForm.repeatedPassword"
+        type="input-password"
+        label="Repeat password"
+        placeholder="Enter new password again"
+        :validator="$v.repeatedPassword"
+      />
+    </AuthForm>
+  </AuthLayout>
 </template>
 
 <script setup lang="ts">
@@ -40,6 +35,7 @@
   import { passwordValid, repeatedPasswordValid } from '@/components/validation/validation';
   import AuthForm from '@/components/auth/FormLayout.vue';
   import InputWrapper from '@/components/generic/InputWrapper.vue';
+  import AuthLayout from '@/components/auth/AuthLayout.vue';
 
   interface PasswordResetDto extends NewPasswordDto {
     repeatedPassword: string;
@@ -87,61 +83,3 @@
     }
   }
 </script>
-
-<style lang="scss" scoped>
-  @import "@/assets/variables";
-
-  .container {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    height: 100%;
-  }
-
-  .brand {
-    font-weight: bold;
-    font-size: 35px;
-    margin-top: 0;
-    margin-bottom: 15px;
-    color: $main-color;
-    text-align: center;
-  }
-
-  .tabs-switch {
-    display: flex;
-    gap: 15px;
-
-    button {
-      background-color: transparent;
-      border: none;
-      color: inherit;
-      font: inherit;
-      cursor: pointer;
-      padding: 0;
-      appearance: none;
-      text-transform: uppercase;
-      font-size: 20px;
-    }
-
-    .active {
-      color: $main-color;
-      border-bottom: 2px solid $main-color;
-    }
-  }
-
-  .form-container {
-    padding: 40px;
-    background: white;
-    min-width: 500px;
-    border-radius: 20px;
-    box-shadow: $shadow;
-    display: flex;
-    flex-direction: column;
-    @media screen and (max-width: 600px) {
-      min-width: 100%;
-      height: 100%;
-      padding: 30px;
-    }
-  }
-</style>
