@@ -156,6 +156,7 @@
     }
 
     .show-password {
+      user-select: none;
       position: absolute;
       right: 10px;
       top: 32px;
