@@ -11,13 +11,13 @@
       @input="updateValue"
     >
 
-    <template v-if="type === 'input-password'">
-      <Component
-        :is="showPassword ? EyeCrossedIcon : EyeIcon"
-        class="show-password"
-        @click="showPassword = !showPassword"
-      />
-    </template>
+    <div
+      v-if="type === 'input-password'"
+      class="show-password"
+      @mousedown.prevent="showPassword = !showPassword"
+    >
+      <Component :is="showPassword ? EyeCrossedIcon : EyeIcon" />
+    </div>
 
     <input
       v-if="type === 'date'"
@@ -116,9 +116,39 @@
         margin-bottom: 23px;
       }
 
-      &:has(+ svg) {
+      &:has(+ .show-password) {
         padding: 10px 40px 10px 15px;
       }
+    }
+
+    input:focus + .show-password {
+      visibility: visible;
+    }
+
+    .show-password {
+      user-select: none;
+      position: absolute;
+      right: 10px;
+      top: 32px;
+      cursor: pointer;
+      visibility: hidden;
+    }
+
+    .show-password:before {
+      content: "";
+      opacity: 0;
+      position: absolute;
+      right: -3px;
+      top: -3px;
+      height: 31px;
+      width: 31px;
+      border-radius: 50%;
+      background: grey;
+      transition: opacity 150ms linear;
+    }
+
+    .show-password:hover::before {
+      opacity: 0.3;
     }
 
     input {
@@ -153,14 +183,6 @@
     select:has(option:checked:not([value])) option,
     select:has(option:checked:not([value=""])) option {
       color: black;
-    }
-
-    .show-password {
-      user-select: none;
-      position: absolute;
-      right: 10px;
-      top: 32px;
-      cursor: pointer;
     }
 
     .validation-error-outline {
