@@ -24,7 +24,7 @@
       <Link
         v-else
         text="Back to login"
-        @clicked="currentTab = 0"
+        @click="currentTab = 0"
       />
       <Component
         :is="tabs[currentTab]"

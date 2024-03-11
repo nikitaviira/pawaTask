@@ -119,6 +119,7 @@
       </div>
     </div>
     <Loader v-else />
+
     <CreateTaskModal
       :show="showSaveTaskModal"
       :task-id="selectedTaskId"
@@ -129,6 +130,10 @@
     <TaskDetailsModal
       :show="showTaskDetailsModal"
       :task-id="selectedTaskId"
+      @open-edit="() => {
+        showTaskDetailsModal = false;
+        showSaveTaskModal = true;
+      }"
       @closed="closeTaskDetailsModal"
     />
   </div>

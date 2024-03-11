@@ -5,6 +5,13 @@
     :loading="loading"
     @closed="closeModal"
   >
+    <template #title-action>
+      <Link
+        class="title-action"
+        text="Edit task"
+        @click.once="emit('open-edit')"
+      />
+    </template>
     <div class="description">
       {{ taskDetails.description }}
     </div>
@@ -67,9 +74,11 @@
   import useVuelidate from '@vuelidate/core';
   import InputWrapper from '@/components/generic/InputWrapper.vue';
   import SubmitButton from '@/components/buttons/SubmitButton.vue';
+  import Link from '@/components/generic/Link.vue';
 
   const emit = defineEmits<{
-    (e: 'closed'): void
+    (e: 'closed'): void,
+    (e: 'open-edit'): void
   }>();
 
   const props = defineProps<{
@@ -96,18 +105,16 @@
     }
   });
 
-  const rules = {
-    comment: {
-      required,
-      maxLength: maxLength(150)
-    }
-  };
-
   const commentForm = ref<SaveCommentDto>({
     comment: ''
   });
 
-  const $v = useVuelidate(rules, commentForm);
+  const $v = useVuelidate({
+    comment: {
+      required,
+      maxLength: maxLength(150)
+    }
+  }, commentForm);
 
   async function loadTask(taskId: number) {
     loading.value = true;
@@ -140,6 +147,11 @@
 <style scoped lang="scss">
   * {
     font-size: 14px;
+  }
+
+  .title-action {
+    flex: auto;
+    min-width: 60px;
   }
 
   .description {

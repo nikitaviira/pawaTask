@@ -22,7 +22,7 @@
 
     <Link
       text="Forgot your password?"
-      @clicked="emit('open-tab', 2)"
+      @click="emit('open-tab', 2)"
     />
   </AuthForm>
 </template>

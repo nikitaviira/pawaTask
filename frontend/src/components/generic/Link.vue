@@ -1,14 +1,10 @@
 <template>
-  <p
-    class="link"
-    @click="emit('clicked')"
-  >
+  <p class="link">
     {{ text }}
   </p>
 </template>
 
 <script setup lang="ts">
-  const emit = defineEmits<{ (e: 'clicked'): void }>();
   defineProps<{ text: string }>();
 </script>
 

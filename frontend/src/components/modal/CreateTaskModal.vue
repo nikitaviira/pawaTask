@@ -65,9 +65,9 @@
     taskId: number | null
   }>();
 
-  watch(() => props.taskId, (taskId) => {
-    if (props.show && taskId) {
-      loadTask(taskId);
+  watch(() => props.show, (show) => {
+    if (show && props.taskId) {
+      loadTask(props.taskId);
     }
   });
 

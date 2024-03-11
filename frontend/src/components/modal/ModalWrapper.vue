@@ -21,6 +21,7 @@
             <p class="title">
               {{ title }}
             </p>
+            <slot name="title-action" />
             <div>
               <CloseIcon
                 class="close-btn"
@@ -215,16 +216,11 @@
     }
   }
 
-  .v-leave-active {
-    transition: opacity 0.5s ease;
-  }
-
-  .v-enter-active {
+  .v-leave-active, .v-enter-active {
     transition: opacity 0.3s ease;
   }
 
-  .v-enter-from,
-  .v-leave-to {
+  .v-enter-from, .v-leave-to {
     opacity: 0;
   }
 </style>
