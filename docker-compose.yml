@@ -82,7 +82,9 @@ services:
 
   email-service:
     build:
-      dockerfile: email.Dockerfile
+      args:
+        SERVICE_NAME: email-service
+    command: java -jar /app/email-service.jar
     depends_on:
       kafka:
         condition: service_healthy
@@ -96,7 +98,9 @@ services:
 
   auth-service:
     build:
-      dockerfile: auth.Dockerfile
+      args:
+        SERVICE_NAME: auth-service
+    command: java -jar /app/auth-service.jar
     depends_on:
       kafka:
         condition: service_healthy
@@ -112,7 +116,9 @@ services:
 
   task-service:
     build:
-      dockerfile: task.Dockerfile
+      args:
+        SERVICE_NAME: task-service
+    command: java -jar /app/task-service.jar
     depends_on:
       kafka:
         condition: service_healthy
@@ -128,7 +134,9 @@ services:
 
   gateway:
     build:
-      dockerfile: gateway.Dockerfile
+      args:
+        SERVICE_NAME: gateway
+    command: java -jar /app/gateway.jar
     depends_on:
       redis:
         condition: service_healthy
