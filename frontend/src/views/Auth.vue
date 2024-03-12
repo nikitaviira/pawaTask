@@ -59,11 +59,11 @@
       appearance: none;
       text-transform: uppercase;
       font-size: 20px;
-    }
 
-    .active {
-      color: $main-color;
-      border-bottom: 2px solid $main-color;
+      &.active {
+        color: $main-color;
+        border-bottom: 2px solid $main-color;
+      }
     }
   }
 </style>
