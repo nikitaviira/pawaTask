@@ -15,18 +15,18 @@ export const useUserStore = defineStore('user', {
       try {
         const { data } = await authController.register(credentials);
         this.setUserInfo(data);
-      } catch (err) {
+      } catch (error) {
         this.removeUserInfo();
-        throw err;
+        throw error;
       }
     },
     async login(credentials: LoginRequestDto) {
       try {
         const { data } = await authController.login(credentials);
         this.setUserInfo(data);
-      } catch (err) {
+      } catch (error) {
         this.removeUserInfo();
-        throw err;
+        throw error;
       }
     },
     async logout() {
