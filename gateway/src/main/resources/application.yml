@@ -13,6 +13,11 @@ redis:
   host: localhost
   port: 6379
 
+rateLimit:
+  maxRps: 100
+  maxRpm: 1000
+  blockMinutes: 5
+
 spring:
   cloud:
     gateway:

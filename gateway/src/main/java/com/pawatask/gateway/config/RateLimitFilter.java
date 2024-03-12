@@ -3,6 +3,7 @@ package com.pawatask.gateway.config;
 import com.pawatask.gateway.exception.RateLimitExceeded;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.core.Ordered;
@@ -23,9 +24,12 @@ import static reactor.core.publisher.Mono.error;
 @Slf4j
 public class RateLimitFilter implements GlobalFilter, Ordered {
   private final ReactiveRedisTemplate<String, Long> redisTemplate;
-  private final Long blockMinutesOnExceedingRPM = 5L;
-  private final Long maxRequestsPerSecond = 100L;
-  private final Long maxRequestsPerMinute = 1000L;
+  @Value("${rateLimit.blockMinutes}")
+  private Long blockMinutes;
+  @Value("${rateLimit.maxRps}")
+  private Long maxRequestsPerSecond;
+  @Value("${rateLimit.maxRpm}")
+  private Long maxRequestsPerMinute;
 
   @Override
   public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
@@ -49,7 +53,7 @@ public class RateLimitFilter implements GlobalFilter, Ordered {
         .switchIfEmpty(defer(() -> redisTemplate.opsForValue().set(perMinuteKey, 0L, ofMinutes(1L)).thenReturn(0L)))
         .flatMap(value -> {
           if (value >= maxRequestsPerMinute) {
-            return redisTemplate.opsForValue().set(blockedKey, -1L, ofMinutes(blockMinutesOnExceedingRPM))
+            return redisTemplate.opsForValue().set(blockedKey, -1L, ofMinutes(blockMinutes))
                 .flatMap(ignore -> error(rateLimitExceeded(ipAddress)));
           }
           return redisTemplate.opsForValue().increment(perMinuteKey);
