@@ -5,7 +5,6 @@ import PageNotFound from '@/views/PageNotFound.vue';
 import { useUserStore } from '@/stores/userStore';
 import passwordResetController from '@/api/controllers/passwordResetController';
 import ResetPassword from '@/views/PasswordReset.vue';
-import type { ErrorDto } from '@/api/client';
 import { useAlertStore } from '@/stores/alertStore';
 
 async function verifyResetPasswordOtp(to: RouteLocationNormalized) {
@@ -13,9 +12,9 @@ async function verifyResetPasswordOtp(to: RouteLocationNormalized) {
   try {
     await passwordResetController.verifyOtp(to.params.otp as string);
     return true;
-  } catch (e: any) {
-    const { data }: { data: ErrorDto } = e.response;
-    alertStore.addAlert(data.message);
+  } catch (error: any) {
+    const message = error.response?.data?.message;
+    if (message) alertStore.addAlert(message);
     return '/auth';
   }
 }
@@ -56,13 +55,9 @@ const router = createRouter({
 
 router.beforeEach((to) => {
   const userStore = useUserStore();
-  const alertStore = useAlertStore();
-
   if (to.meta.authRequired && !userStore.isLoggedIn) {
-    alertStore.addAlert('You are not authenticated');
     return '/auth';
   } else if (to.meta.disallowAuthed && userStore.isLoggedIn) {
-    alertStore.addAlert('Log out to access this page');
     return '/';
   }
   return true;
